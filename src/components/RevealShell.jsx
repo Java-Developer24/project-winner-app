@@ -302,21 +302,21 @@ export default function RevealShell({ seed, className = '' }) {
                 <div className="relative w-full aspect-square max-w-2xl mx-auto flex items-center justify-center">
                   {/* Holographic rotating wheel - OPTIMIZED */}
                   <motion.div
-                    className="absolute inset-0 rounded-full will-change-transform"
+                    className="absolute rounded-full will-change-transform"
                     style={{
+                      // Limit the wheel size so it never exceeds the viewport
+                      width: 'min(560px, 86vw)',
+                      height: 'min(560px, 86vw)',
+                      left: '50%',
+                      top: '50%',
+                      transform: 'translate(-50%, -50%)',
                       border: '3px solid transparent',
                       borderTopColor: 'rgba(255, 215, 0, 0.7)',
                       borderRightColor: 'rgba(255, 79, 217, 0.7)',
-                      boxShadow: '0 0 60px rgba(255, 215, 0, 0.5), inset 0 0 40px rgba(255, 79, 217, 0.3)',
+                      boxShadow: '0 0 36px rgba(255, 215, 0, 0.4), inset 0 0 24px rgba(255, 79, 217, 0.25)',
                     }}
-                    animate={{
-                      rotate: 360,
-                    }}
-                    transition={{
-                      duration: 8,
-                      repeat: repeatCount,
-                      ease: 'linear',
-                    }}
+                    animate={assemblyProgress < 1 ? { rotate: assemblyProgress * 720 } : { rotate: 360 }}
+                    transition={assemblyProgress < 1 ? { duration: 0.4, ease: 'easeOut' } : { duration: 8, repeat: repeatCount, ease: 'linear' }}
                   />
 
                   {/* Assembling 3D holographic shards - REDUCED from 16 to 12 */}
@@ -384,21 +384,20 @@ export default function RevealShell({ seed, className = '' }) {
 </motion.div>
 
                     
-                    {/* Volumetric glow pulse - OPTIMIZED */}
+                    {/* Volumetric glow pulse - OPTIMIZED (bounded size) */}
                     <motion.div
-                      className="absolute inset-0 rounded-full will-change-transform"
+                      className="absolute rounded-full will-change-transform"
                       style={{
+                        width: 'min(520px, 80vw)',
+                        height: 'min(520px, 80vw)',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)',
                         background: 'radial-gradient(circle, rgba(255, 215, 0, 0.6), transparent 70%)',
-                        filter: 'blur(50px)',
+                        filter: 'blur(40px)',
                       }}
-                      animate={{
-                        scale: [1, 1.5, 1],
-                        opacity: [0.6, 0.25, 0.6],
-                      }}
-                      transition={{
-                        duration: 2.5,
-                        repeat: repeatCount,
-                      }}
+                      animate={assemblyProgress < 1 ? { scale: 1 + assemblyProgress * 0.4, opacity: 0.6 - assemblyProgress * 0.35 } : { scale: [1, 1.4, 1], opacity: [0.6, 0.25, 0.6] }}
+                      transition={assemblyProgress < 1 ? { duration: 0.4, ease: 'easeOut' } : { duration: 2.5, repeat: repeatCount }}
                     />
                   </motion.div>
 
