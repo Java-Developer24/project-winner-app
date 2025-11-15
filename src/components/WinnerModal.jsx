@@ -38,7 +38,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
   // Memoized particle arrays (generated when modal opens)
   const confettiParticles = useMemo(() => {
     if (!isOpen) return [];
-    const count = prefersReducedMotion ? 24 : 50;
+    const count = prefersReducedMotion ? 12 : 24;
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       x: 50 + (Math.random() - 0.5) * 30,
@@ -355,7 +355,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
               >
                 {/* Trophy icon with optimized glow */}
                 <Trophy 
-                  className="w-24 h-24 text-yellow-300 relative z-10 will-change-transform" 
+                  className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 text-yellow-300 relative z-10 will-change-transform" 
                   style={{ 
                     filter: 'drop-shadow(0 0 25px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 50px rgba(255, 165, 0, 0.6))' 
                   }} 
@@ -422,7 +422,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                 transformStyle: 'preserve-3d',
               }}
               transition={{ type: 'spring', damping: 25, stiffness: 200, delay: 0.15 }}
-              className="relative max-w-3xl w-full pointer-events-auto"
+              className="relative max-w-sm sm:max-w-md md:max-w-xl lg:max-w-2xl w-full pointer-events-auto"
             >
               {/* MAIN CARD - Multi-layer glass with extreme depth */}
               <div className="relative rounded-[2.5rem] overflow-visible">
@@ -501,18 +501,16 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                 <div className="absolute top-1/3 right-0 w-64 h-64 bg-purple-500/40 rounded-full blur-[120px] translate-x-1/2" />
                 <div className="absolute bottom-1/3 left-0 w-64 h-64 bg-cyan-400/40 rounded-full blur-[120px] -translate-x-1/2" />
 
-                {/* Close button */}
+                  {/* Close button */}
                 <button
                   onClick={onClose}
-                  className="absolute top-5 right-5 z-20 p-2.5 rounded-full bg-white/5 hover:bg-white/15 transition-all backdrop-blur-sm group border-2 border-cyan-400/40 hover:border-cyan-400"
+                  className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 p-2 rounded-full bg-white/5 hover:bg-white/15 transition-all backdrop-blur-sm group border-2 border-cyan-400/40 hover:border-cyan-400"
                   aria-label="Close modal"
                   style={{ boxShadow: '0 0 25px rgba(0, 255, 255, 0.4)' }}
                 >
-                  <X className="w-6 h-6 text-cyan-300 group-hover:rotate-90 group-hover:scale-125 transition-transform duration-300" />
-                </button>
-
-                {/* CONTENT */}
-                <div className="relative p-8 md:p-10">
+                  <X className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-cyan-300 group-hover:rotate-90 group-hover:scale-125 transition-transform duration-300" />
+                </button>                {/* CONTENT */}
+                <div className="relative p-4 sm:p-5 md:p-6 lg:p-8">
                   {/* ═══════════════════════════════════════════════════════════
                       CONGRATULATIONS HEADER - Vibrant Gradient with Halo
                       ═══════════════════════════════════════════════════════════ */}
@@ -539,7 +537,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                     />
                     
                     <h2
-                      className="text-4xl md:text-6xl font-black text-center relative z-10 tracking-wide"
+                      className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-center relative z-10 tracking-wide"
                       style={{
                         fontFamily: 'Space Grotesk, sans-serif',
                         background: 'linear-gradient(135deg, #FFD700 0%, #FF6B35 35%, #FF1493 65%, #00FFFF 100%)',
@@ -581,7 +579,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                           <img
                             src={winner.avatar}
                             alt={`${winner.name}'s avatar`}
-                            className="w-28 h-28 rounded-full border-4 border-cyan-400/70 relative z-10 object-cover"
+                            className="w-20 sm:w-24 md:w-28 h-20 sm:h-24 md:h-28 rounded-full border-4 border-cyan-400/70 relative z-10 object-cover"
                             style={{ boxShadow: '0 0 40px rgba(0, 255, 255, 0.7), 0 20px 40px rgba(0, 0, 0, 0.6)' }}
                           />
                           
@@ -686,7 +684,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                       </div>
 
                       {/* Winner name */}
-                      <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 text-center" style={{ textShadow: '0 0 30px rgba(0, 255, 255, 0.7), 0 4px 12px rgba(0, 0, 0, 0.5)' }}>{winner.name}</h3>
+                      <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-3 text-center" style={{ textShadow: '0 0 30px rgba(0, 255, 255, 0.7), 0 4px 12px rgba(0, 0, 0, 0.5)' }}>{winner.name}</h3>
                       
                       {/* Grand Prize Winner badge */}
                       <motion.div
@@ -725,8 +723,8 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                         <motion.div
                           className="relative mx-auto"
                           style={{
-                            width: '220px',
-                            height: '220px',
+                            width: 'min(160px, 80vw)',
+                            height: 'min(160px, 80vw)',
                           }}
                           animate={{
                             y: [0, -12, 0],

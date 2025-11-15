@@ -47,7 +47,7 @@ export default function RevealStarter({ seed, className = '' }) {
       <Suspense
         fallback={
           <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
-            <LoaderLottie />
+            <LoaderLottie className="w-64 h-64 md:w-80 md:h-80" />
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

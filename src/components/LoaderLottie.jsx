@@ -26,30 +26,61 @@ export default function LoaderLottie({ className = '' }) {
   const rotateY = useTransform(mouseX, [-300, 300], [-5, 5]);
 
   useEffect(() => {
+    // Use viewport center for stable parallax to avoid transformed parent issues
     const handleMouseMove = (e) => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        mouseX.set(e.clientX - centerX);
-        mouseY.set(e.clientY - centerY);
-      }
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      // Clamp the delta so the parallax cannot push items far off-screen
+      const dx = Math.max(-300, Math.min(300, e.clientX - centerX));
+      const dy = Math.max(-300, Math.min(300, e.clientY - centerY));
+
+      mouseX.set(dx);
+      mouseY.set(dy);
     };
 
+    const handleLeave = () => {
+      mouseX.set(0);
+      mouseY.set(0);
+    };
+
+    // Attach pointer events to the window - viewport origin is used for parallax
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleLeave);
+
+    // Ensure the center is recalculated on resize/scroll
+    const handleWindowChange = () => {
+      handleLeave();
+    };
+
+    window.addEventListener('scroll', handleWindowChange);
+    window.addEventListener('resize', handleWindowChange);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleLeave);
+      window.removeEventListener('scroll', handleWindowChange);
+      window.removeEventListener('resize', handleWindowChange);
+    };
   }, [mouseX, mouseY]);
+
+  const showDebug = process.env.NODE_ENV === 'development';
 
   return (
     <div ref={containerRef} className={`flex items-center justify-center ${className}`}>
       <motion.div 
-        className="relative w-64 h-64"
+        className="relative w-64 h-64 will-change-transform transform-gpu"
         style={{
           rotateX,
           rotateY,
           transformStyle: 'preserve-3d',
         }}
       >
+        {showDebug && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="w-6 h-6 rounded-full bg-red-500/60" />
+          </div>
+        )}
         {/* Volumetric Light Beams */}
         {Array.from({ length: 8 }).map((_, i) => (
           <motion.div

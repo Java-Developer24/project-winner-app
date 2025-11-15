@@ -2,6 +2,7 @@
 
 import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useSound } from '@/hooks/useSound';
 import WinnerModal from './WinnerModal';
@@ -251,6 +252,16 @@ export default function RevealShell({ seed, className = '' }) {
         </div>
       </motion.div>
       
+      {/* Fixed overlay loader so it stays centered even while the scene is being scaled */}
+      {stage === 'loading' && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none" style={{ contain: 'layout', isolation: 'isolate' }}>
+          <div className="pointer-events-auto">
+            <LoaderLottie className="w-64 h-64 md:w-80 md:h-80" />
+          </div>
+        </div>,
+        document.body
+      )}
+
       {/* Main Content with Cinematic Camera Zoom Effect */}
       <motion.div 
         className="relative z-10 flex items-center justify-center min-h-screen p-4"
@@ -273,7 +284,7 @@ export default function RevealShell({ seed, className = '' }) {
               transition={{ duration: 0.6 }}
               className="text-center"
             >
-              <LoaderLottie />
+              {/* Inline loader removed - using fixed overlay portal so loader remains centered independent of scene transforms */}
               
               <motion.div
                 className="mt-8 space-y-2"
@@ -288,7 +299,7 @@ export default function RevealShell({ seed, className = '' }) {
             </motion.div>
           )}
 
-          {/* STEP 2 - Assembly Stage with Animation Type Based on Winner */}
+         {/* STEP 2 - Assembly Stage with Animation Type Based on Winner */}
           {stage === 'assembly' && (
             <motion.div
               key={`assembly-${currentWinnerIndex}`}
@@ -300,59 +311,59 @@ export default function RevealShell({ seed, className = '' }) {
               {/* Winner 1: 3D Shards Assembling with Holographic Wheel */}
               {currentWinnerIndex === 0 && (
                 <div className="relative w-full aspect-square max-w-2xl mx-auto flex items-center justify-center">
-                  {/* Holographic rotating wheel - OPTIMIZED */}
+                  {/* Holographic rotating wheel */}
                   <motion.div
-                    className="absolute rounded-full will-change-transform"
+                    className="absolute inset-0 rounded-full"
                     style={{
-                      // Limit the wheel size so it never exceeds the viewport
-                      width: 'min(560px, 86vw)',
-                      height: 'min(560px, 86vw)',
-                      left: '50%',
-                      top: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      border: '3px solid transparent',
-                      borderTopColor: 'rgba(255, 215, 0, 0.7)',
-                      borderRightColor: 'rgba(255, 79, 217, 0.7)',
-                      boxShadow: '0 0 36px rgba(255, 215, 0, 0.4), inset 0 0 24px rgba(255, 79, 217, 0.25)',
+                      border: '4px solid transparent',
+                      borderTopColor: 'rgba(255, 215, 0, 0.8)',
+                      borderRightColor: 'rgba(255, 79, 217, 0.8)',
+                      boxShadow: '0 0 80px rgba(255, 215, 0, 0.6), inset 0 0 60px rgba(255, 79, 217, 0.4)',
                     }}
-                    animate={assemblyProgress < 1 ? { rotate: assemblyProgress * 720 } : { rotate: 360 }}
-                    transition={assemblyProgress < 1 ? { duration: 0.4, ease: 'easeOut' } : { duration: 8, repeat: repeatCount, ease: 'linear' }}
+                    animate={{
+                      rotate: 360,
+                      scale: [1, 1.05, 1],
+                    }}
+                    transition={{
+                      rotate: { duration: 6, repeat: Infinity, ease: 'linear' },
+                      scale: { duration: 3, repeat: Infinity },
+                    }}
                   />
 
-                  {/* Assembling 3D holographic shards - REDUCED from 16 to 12 */}
-                  {Array.from({ length: 12 }).map((_, i) => {
-                    const angle = (i / 12) * Math.PI * 2;
-                    const radius = 180;
-                    const progress = Math.max(0, Math.min(1, (assemblyProgress - i * 0.04) * 1.5));
+                  {/* Assembling 3D holographic shards */}
+                  {Array.from({ length: 16 }).map((_, i) => {
+                    const angle = (i / 16) * Math.PI * 2;
+                    const radius = 200;
+                    const progress = Math.max(0, Math.min(1, (assemblyProgress - i * 0.03) * 1.5));
                     
                     return (
                       <motion.div
                         key={i}
-                        className="absolute w-16 h-24 rounded-lg will-change-transform"
+                        className="absolute w-20 h-28 rounded-xl"
                         style={{
-                          background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.7), rgba(255, 79, 217, 0.7))',
-                          boxShadow: '0 0 30px rgba(255, 215, 0, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.2)',
-                          border: '1.5px solid rgba(255, 255, 255, 0.3)',
-                          backdropFilter: 'blur(8px)',
+                          background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.8), rgba(255, 79, 217, 0.8))',
+                          boxShadow: '0 0 40px rgba(255, 215, 0, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.3)',
+                          border: '2px solid rgba(255, 255, 255, 0.4)',
+                          backdropFilter: 'blur(10px)',
                         }}
                         initial={{
                           x: Math.cos(angle) * radius,
                           y: Math.sin(angle) * radius,
                           rotate: angle * (180 / Math.PI) + Math.random() * 180,
                           opacity: 0,
-                          scale: 0.4,
+                          scale: 0.5,
                         }}
                         animate={{
-                          x: (i % 3 - 1) * 35,
-                          y: (Math.floor(i / 3) - 1.5) * 35,
+                          x: (i % 4 - 1.5) * 40,
+                          y: (Math.floor(i / 4) - 1.5) * 40,
                           rotate: 0,
                           opacity: progress,
-                          scale: progress * 0.95,
+                          scale: progress * 1,
                         }}
                         transition={{
-                          duration: 1.2,
+                          duration: 1.5,
                           ease: [0.34, 1.56, 0.64, 1],
-                          delay: i * 0.06,
+                          delay: i * 0.05,
                         }}
                       />
                     );
