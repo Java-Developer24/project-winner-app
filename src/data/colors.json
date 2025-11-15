@@ -1,0 +1,57 @@
+{
+  "theme": {
+    "primary": {
+      "gradient": ["#667eea", "#764ba2", "#f093fb"],
+      "solid": "#764ba2"
+    },
+    "secondary": {
+      "gradient": ["#4facfe", "#00f2fe"],
+      "solid": "#4facfe"
+    },
+    "accent": {
+      "gold": "#FFD700",
+      "silver": "#C0C0C0",
+      "bronze": "#CD7F32",
+      "rose": "#FF6B9D"
+    },
+    "rarity": {
+      "legendary": {
+        "primary": "#FFD700",
+        "glow": "#FFA500",
+        "gradient": ["#FFD700", "#FFA500", "#FF8C00"]
+      },
+      "epic": {
+        "primary": "#C0C0C0",
+        "glow": "#E8E8E8",
+        "gradient": ["#E8E8E8", "#C0C0C0", "#A8A8A8"]
+      },
+      "rare": {
+        "primary": "#4A90E2",
+        "glow": "#5DADE2",
+        "gradient": ["#5DADE2", "#4A90E2", "#3B7DC7"]
+      },
+      "uncommon": {
+        "primary": "#9B59B6",
+        "glow": "#BB8FCE",
+        "gradient": ["#BB8FCE", "#9B59B6", "#7D3C98"]
+      },
+      "common": {
+        "primary": "#E74C3C",
+        "glow": "#EC7063",
+        "gradient": ["#EC7063", "#E74C3C", "#C0392B"]
+      }
+    }
+  },
+  "confetti": {
+    "palette": [
+      "#FF6B9D",
+      "#C44569",
+      "#FFD93D",
+      "#6BCB77",
+      "#4D96FF",
+      "#9D84B7",
+      "#FF8066",
+      "#FEC260"
+    ]
+  }
+}

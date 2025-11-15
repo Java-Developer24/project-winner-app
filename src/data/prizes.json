@@ -1,0 +1,28 @@
+{
+  "prizes": [
+    {
+      "id": "jupiter-scooty",
+      "name": "Jupiter Scooty",
+      
+     
+      "emoji": "/scootyicon.png",
+      "rarity": "legendary",
+      "color": "#FFD700",
+      "model": "scooty"
+    },
+    {
+      "id": "premium-bike",
+      "name": "Bike",
+     
+     
+      "emoji": "/bikeicon.png",
+      "rarity": "legendary",
+      "color": "#FF4FD9",
+      "model": "bike"
+    }
+  ],
+  "winners": [
+    { "id": "w1", "name": "Winner 1", "avatar": "https://i.pravatar.cc/150?img=1" },
+    { "id": "w2", "name": "Winner 2", "avatar": "https://i.pravatar.cc/150?img=2" }
+  ]
+}
