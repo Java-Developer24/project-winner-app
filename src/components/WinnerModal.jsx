@@ -435,7 +435,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
               className="relative max-w-3xl w-full pointer-events-auto"
             >
               {/* MAIN CARD - Multi-layer glass with extreme depth */}
-              <div className="relative rounded-[2.5rem] overflow-hidden">
+              <div className="relative rounded-[2.5rem] overflow-visible">
                 {/* Base glass layer */}
                 <div 
                   className="absolute inset-0 bg-gradient-to-br from-purple-950/50 via-slate-950/70 to-cyan-950/50" 
