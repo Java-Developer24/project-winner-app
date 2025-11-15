@@ -2,14 +2,17 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /**
- * Spline 3D Hero Scene Component
+ * Spline 3D Hero Scene Component - OPTIMIZED
  * Embeds a cinematic Spline scene with:
  * - Floating neon particles
  * - Glass portal/glowing orb
  * - Soft camera drift
  * - Purple → Pink → Magenta aurora lighting
+ * - Lazy loading with error boundaries
+ * - Reduced motion support
  * 
  * INSTRUCTIONS:
  * 1. Create your scene at https://spline.design/
@@ -20,6 +23,8 @@ export default function SplineHero({ className = '', fallback = true }) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const containerRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
+  const repeatCount = prefersReducedMotion ? 0 : Infinity;
 
   // TODO: Replace with your actual Spline scene URL
   const SPLINE_SCENE_URL = 'https://prod.spline.design/YOUR-SCENE-ID/scene.splinecode';
@@ -34,10 +39,14 @@ export default function SplineHero({ className = '', fallback = true }) {
       return;
     }
 
-    // Dynamically load Spline runtime
+    let timeoutId;
+    let scriptElement;
+
+    // Dynamically load Spline runtime with timeout
     const script = document.createElement('script');
     script.type = 'module';
     script.src = 'https://unpkg.com/@splinetool/viewer@1.0.47/build/spline-viewer.js';
+    script.async = true;
     
     script.onload = () => {
       setIsLoading(false);
@@ -49,17 +58,27 @@ export default function SplineHero({ className = '', fallback = true }) {
       setIsLoading(false);
     };
 
+    // Prevent script from loading indefinitely
+    timeoutId = setTimeout(() => {
+      if (isLoading) {
+        console.warn('Spline viewer loading timeout');
+        setHasError(true);
+        setIsLoading(false);
+      }
+    }, 5000);
+
     document.head.appendChild(script);
+    scriptElement = script;
 
     return () => {
-      // Cleanup
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
+      clearTimeout(timeoutId);
+      if (scriptElement?.parentNode) {
+        scriptElement.parentNode.removeChild(scriptElement);
       }
     };
-  }, [isValidUrl]);
+  }, [isValidUrl, isLoading]);
 
-  // Fallback CSS-only hero
+  // Fallback CSS-only hero with reduced motion support
   if ((!isValidUrl || hasError) && fallback) {
     return (
       <div className={`relative w-full h-full ${className}`}>
@@ -70,14 +89,15 @@ export default function SplineHero({ className = '', fallback = true }) {
             style={{
               background: 'radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%)',
               filter: 'blur(60px)',
+              willChange: prefersReducedMotion ? 'auto' : 'transform',
             }}
-            animate={{
+            animate={prefersReducedMotion ? {} : {
               scale: [1, 1.2, 1],
               opacity: [0.4, 0.6, 0.4],
             }}
             transition={{
               duration: 8,
-              repeat: Infinity,
+              repeat: repeatCount,
               ease: 'easeInOut',
             }}
           />
@@ -86,21 +106,22 @@ export default function SplineHero({ className = '', fallback = true }) {
             style={{
               background: 'radial-gradient(circle, rgba(240, 147, 251, 0.5) 0%, transparent 70%)',
               filter: 'blur(60px)',
+              willChange: prefersReducedMotion ? 'auto' : 'transform',
             }}
-            animate={{
+            animate={prefersReducedMotion ? {} : {
               scale: [1.2, 1, 1.2],
               opacity: [0.5, 0.7, 0.5],
             }}
             transition={{
               duration: 10,
-              repeat: Infinity,
+              repeat: repeatCount,
               ease: 'easeInOut',
               delay: 2,
             }}
           />
           
-          {/* Floating particles */}
-          {[...Array(30)].map((_, i) => (
+          {/* Floating particles - reduced count for performance */}
+          {!prefersReducedMotion && [...Array(15)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute w-2 h-2 bg-white rounded-full"
@@ -115,7 +136,7 @@ export default function SplineHero({ className = '', fallback = true }) {
               }}
               transition={{
                 duration: 4 + Math.random() * 2,
-                repeat: Infinity,
+                repeat: repeatCount,
                 delay: Math.random() * 5,
                 ease: 'easeInOut',
               }}

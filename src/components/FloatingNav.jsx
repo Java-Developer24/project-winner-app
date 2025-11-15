@@ -3,16 +3,20 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /**
- * Premium floating glass navigation bar
+ * Premium floating glass navigation bar - OPTIMIZED
  * Features:
- * - Glass morphism with blur
+ * - Glass morphism with blur (optimized)
  * - Subtle glow border
- * - Hover animations
+ * - Hover animations (reduced in prefers-reduced-motion)
  * - Aurora brand styling
+ * - will-change hints for performance
  */
 export default function FloatingNav() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
@@ -21,13 +25,14 @@ export default function FloatingNav() {
       className="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-2xl glass-morph-premium"
       style={{
         boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.3)',
+        willChange: prefersReducedMotion ? 'auto' : 'transform',
       }}
     >
       <div className="flex items-center gap-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <motion.div
-            whileHover={{ rotate: 180, scale: 1.1 }}
+            whileHover={prefersReducedMotion ? {} : { rotate: 180, scale: 1.1 }}
             transition={{ duration: 0.3 }}
           >
             <Sparkles className="w-5 h-5 text-purple-400" />
@@ -47,14 +52,14 @@ export default function FloatingNav() {
             >
               <motion.span
                 className="text-sm text-white/80 group-hover:text-white transition-colors font-medium"
-                whileHover={{ y: -2 }}
+                whileHover={prefersReducedMotion ? {} : { y: -2 }}
               >
                 {item}
               </motion.span>
               <motion.div
                 className="absolute -bottom-1 left-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity"
                 initial={{ width: 0 }}
-                whileHover={{ width: '100%' }}
+                whileHover={prefersReducedMotion ? {} : { width: '100%' }}
               />
             </Link>
           ))}

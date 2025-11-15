@@ -3,28 +3,56 @@
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { Sparkles, Trophy } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import ParallaxBackground from './ParallaxBackground';
 import PremiumButton from './PremiumButton';
-import SplineHero from './SplineHero';
 import FloatingNav from './FloatingNav';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+
+// Lazy load SplineHero to improve initial page load
+const SplineHero = dynamic(() => import('./SplineHero'), { 
+  loading: () => null,
+  ssr: false 
+});
 
 export default function HomeHero() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const prefersReducedMotion = useReducedMotion();
+  const repeatCount = prefersReducedMotion ? 0 : Infinity;
+  const animationFrameRef = useRef(null);
+  const lastMouseTimeRef = useRef(0);
 
-  // Mouse parallax effect
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const { clientX, clientY } = e;
-      const { innerWidth, innerHeight } = window;
+  // Throttled mouse parallax effect - only updates at most every 16ms (60fps)
+  const handleMouseMove = useCallback((e) => {
+    const now = Date.now();
+    if (now - lastMouseTimeRef.current < 16) return; // Throttle to 60fps max
+    
+    lastMouseTimeRef.current = now;
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+    
+    animationFrameRef.current = requestAnimationFrame(() => {
       mouseX.set((clientX / innerWidth - 0.5) * 20);
       mouseY.set((clientY / innerHeight - 0.5) * 20);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    });
   }, [mouseX, mouseY]);
+
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [handleMouseMove]);
 
   const x = useTransform(mouseX, [-10, 10], [-5, 5]);
   const y = useTransform(mouseY, [-10, 10], [-5, 5]);
@@ -50,7 +78,7 @@ export default function HomeHero() {
         }}
         transition={{
           duration: 18,
-          repeat: Infinity,
+          repeat: repeatCount,
           ease: 'easeInOut',
         }}
       />
@@ -68,40 +96,50 @@ export default function HomeHero() {
         className="hidden lg:block absolute left-8 xl:left-16 top-1/2 -translate-y-1/2 z-[5] pointer-events-none"
       >
         {/* Soft radial glow - cyan accent matching Jupiter */}
-        <motion.div
-          className="absolute -inset-16 -z-10"
-          animate={{
-            opacity: [0.3, 0.6, 0.3],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          style={{
-            background: 'radial-gradient(circle, rgba(6, 182, 212, 0.4) 0%, rgba(6, 182, 212, 0.2) 40%, transparent 70%)',
-            filter: 'blur(60px)',
-          }}
-        />
+        {!prefersReducedMotion && (
+          <motion.div
+            className="absolute -inset-16 -z-10"
+            animate={{
+              opacity: [0.3, 0.6, 0.3],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 4,
+              repeat: repeatCount,
+              ease: 'easeInOut',
+            }}
+            style={{
+              background: 'radial-gradient(circle, rgba(6, 182, 212, 0.4) 0%, rgba(6, 182, 212, 0.2) 40%, transparent 70%)',
+              filter: 'blur(60px)',
+            }}
+          />
+        )}
         
-        {/* Bike image - INCREASED SIZE */}
-        <motion.img
-          src="/scooty2.jpeg"
-          alt="Jupiter Scooty Prize"
-          className="w-80 xl:w-[28rem] h-auto object-contain drop-shadow-2xl rounded-2xl"          
+        {/* Bike image - INCREASED SIZE with Next.js Image optimization */}
+        <motion.div
           animate={{
-            y: [0, -15, 0],
+            y: prefersReducedMotion ? 0 : [0, -15, 0],
           }}
           transition={{
             duration: 4,
-            repeat: Infinity,
+            repeat: repeatCount,
             ease: 'easeInOut',
           }}
           style={{
             filter: 'drop-shadow(0 0 30px rgba(168, 85, 247, 0.4))',
           }}
-        />
+        >
+          <Image
+            src="/scooty2.jpeg"
+            alt="Jupiter Scooty Prize"
+            width={448}
+            height={448}
+            loading="lazy"
+            className="w-80 xl:w-[28rem] h-auto object-contain drop-shadow-2xl rounded-2xl"
+            quality={75}
+            sizes="(max-width: 1280px) 320px, 448px"
+          />
+        </motion.div>
       </motion.div>
 
       {/* Right Side - Bike Image - LARGER SIZE */}
@@ -112,42 +150,52 @@ export default function HomeHero() {
         className="hidden lg:block absolute right-8 xl:right-16 top-1/2 -translate-y-1/2 z-[5] pointer-events-none"
       >
         {/* Soft radial glow - magenta accent matching R15 */}
-        <motion.div
-          className="absolute -inset-16 -z-10"
-          animate={{
-            opacity: [0.3, 0.6, 0.3],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 4.5,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 0.5,
-          }}
-          style={{
-            background: 'radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, rgba(236, 72, 153, 0.2) 40%, transparent 70%)',
-            filter: 'blur(60px)',
-          }}
-        />
+        {!prefersReducedMotion && (
+          <motion.div
+            className="absolute -inset-16 -z-10"
+            animate={{
+              opacity: [0.3, 0.6, 0.3],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 4.5,
+              repeat: repeatCount,
+              ease: 'easeInOut',
+              delay: 0.5,
+            }}
+            style={{
+              background: 'radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, rgba(236, 72, 153, 0.2) 40%, transparent 70%)',
+              filter: 'blur(60px)',
+            }}
+          />
+        )}
         
-        {/* Bike image - INCREASED SIZE */}
-        <motion.img
-          src="/bike1.jpeg"
-          alt="R15 Bike Prize"
-          className="w-80 xl:w-[28rem] h-auto object-contain drop-shadow-2xl rounded-2xl"
+        {/* Bike image - INCREASED SIZE with Next.js Image optimization */}
+        <motion.div
           animate={{
-            y: [0, -20, 0],
+            y: prefersReducedMotion ? 0 : [0, -20, 0],
           }}
           transition={{
             duration: 5,
-            repeat: Infinity,
+            repeat: repeatCount,
             ease: 'easeInOut',
             delay: 0.5,
           }}
           style={{
             filter: 'drop-shadow(0 0 30px rgba(236, 72, 153, 0.4))',
           }}
-        />
+        >
+          <Image
+            src="/bike1.jpeg"
+            alt="R15 Bike Prize"
+            width={448}
+            height={448}
+            loading="lazy"
+            className="w-80 xl:w-[28rem] h-auto object-contain drop-shadow-2xl rounded-2xl"
+            quality={75}
+            sizes="(max-width: 1280px) 320px, 448px"
+          />
+        </motion.div>
       </motion.div>
 
       {/* Floating 3D holographic crystal */}
@@ -159,8 +207,8 @@ export default function HomeHero() {
           rotateX: [0, 15, 0],
         }}
         transition={{
-          rotateY: { duration: 20, repeat: Infinity, ease: 'linear' },
-          rotateX: { duration: 5, repeat: Infinity, ease: 'easeInOut' },
+          rotateY: { duration: 20, repeat: repeatCount, ease: 'linear' },
+          rotateX: { duration: 5, repeat: repeatCount, ease: 'easeInOut' },
         }}
       >
         <div className="relative w-full h-full">
@@ -196,7 +244,7 @@ export default function HomeHero() {
           }}
           transition={{
             duration: 8,
-            repeat: Infinity,
+            repeat: repeatCount,
             ease: 'easeInOut',
           }}
         />
@@ -233,7 +281,7 @@ export default function HomeHero() {
               }}
               transition={{
                 duration: 8,
-                repeat: Infinity,
+                repeat: repeatCount,
                 ease: 'easeInOut',
               }}
             />
@@ -262,7 +310,7 @@ export default function HomeHero() {
                     duration: 0.6,
                     scale: {
                       duration: 2,
-                      repeat: Infinity,
+                      repeat: repeatCount,
                       delay: index * 0.2,
                       ease: 'easeInOut',
                     }
@@ -296,7 +344,7 @@ export default function HomeHero() {
               }}
               transition={{
                 duration: 3,
-                repeat: Infinity,
+                repeat: repeatCount,
                 repeatDelay: 2,
                 ease: 'easeInOut',
               }}
@@ -328,7 +376,7 @@ export default function HomeHero() {
             }}
             transition={{
               duration: 6,
-              repeat: Infinity,
+              repeat: repeatCount,
               ease: 'easeInOut',
             }}
           >
@@ -340,8 +388,8 @@ export default function HomeHero() {
                     scale: [1, 1.2, 1],
                   }}
                   transition={{
-                    rotate: { duration: 3, repeat: Infinity, ease: 'linear' },
-                    scale: { duration: 2, repeat: Infinity, ease: 'easeInOut' },
+                    rotate: { duration: 3, repeat: repeatCount, ease: 'linear' },
+                    scale: { duration: 2, repeat: repeatCount, ease: 'easeInOut' },
                   }}
                 >
                   <Trophy className="w-7 h-7" />
@@ -349,7 +397,7 @@ export default function HomeHero() {
                 <span className="text-xl font-bold">Reveal Winner</span>
                 <motion.span
                   animate={{ x: [0, 8, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
+                  transition={{ duration: 1.5, repeat: repeatCount }}
                   className="text-2xl"
                 >
                   →

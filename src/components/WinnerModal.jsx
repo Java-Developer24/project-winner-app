@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { X, Trophy, Award, Sparkles, Home, RefreshCw, Crown, Zap, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /**
  * 🎮 ULTRA-PREMIUM FUTURISTIC WINNER MODAL - REDESIGNED
@@ -32,9 +33,53 @@ import Link from 'next/link';
 export default function WinnerModal({ winner, prize, isOpen, onClose, showNextButton = false, onNextWinner }) {
   const modalRef = useFocusTrap(isOpen);
   const [particles, setParticles] = useState([]);
-  const [confettiParticles, setConfettiParticles] = useState([]);
-  const [sparkParticles, setSparkParticles] = useState([]);
-  const [digitalParticles, setDigitalParticles] = useState([]);
+  const prefersReducedMotion = useReducedMotion();
+
+  // Memoized particle arrays (generated when modal opens)
+  const confettiParticles = useMemo(() => {
+    if (!isOpen) return [];
+    const count = prefersReducedMotion ? 24 : 50;
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      x: 50 + (Math.random() - 0.5) * 30,
+      y: -10,
+      rotation: Math.random() * 360,
+      color: ['#00ffff', '#ff00ff', '#ff1493', '#ffd700', '#00ff88', '#ff6b35'][Math.floor(Math.random() * 6)],
+      delay: Math.random() * 0.3,
+      duration: 2.2 + Math.random() * 1.5,
+      size: Math.random() * 10 + 5,
+    }));
+  }, [isOpen, prefersReducedMotion]);
+
+  const sparkParticles = useMemo(() => {
+    if (!isOpen) return [];
+    const count = prefersReducedMotion ? 8 : 16;
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: -10,
+      delay: Math.random() * 1.5,
+      duration: 3.5 + Math.random() * 2,
+      size: Math.random() * 2 + 1,
+      color: ['#ffd700', '#ffaa00', '#ff6b35'][Math.floor(Math.random() * 3)],
+    }));
+  }, [isOpen, prefersReducedMotion]);
+
+  const digitalParticles = useMemo(() => {
+    if (!isOpen) return [];
+    const count = prefersReducedMotion ? 12 : 24;
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 3 + 1,
+      delay: Math.random() * 4,
+      duration: 4 + Math.random() * 4,
+      color: ['#00ffff', '#ff00ff', '#8b00ff'][Math.floor(Math.random() * 3)],
+    }));
+  }, [isOpen, prefersReducedMotion]);
+
+  const repeatCount = prefersReducedMotion ? 0 : Infinity;
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -67,47 +112,8 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
     };
   }, [isOpen]);
 
-  // Generate all particles on open
-  useEffect(() => {
-    if (isOpen) {
-      // Confetti burst particles
-      const newConfetti = Array.from({ length: 120 }, (_, i) => ({
-        id: i,
-        x: 50 + (Math.random() - 0.5) * 30,
-        y: -10,
-        rotation: Math.random() * 360,
-        color: ['#00ffff', '#ff00ff', '#ff1493', '#ffd700', '#00ff88', '#ff6b35'][Math.floor(Math.random() * 6)],
-        delay: Math.random() * 0.4,
-        duration: 2.5 + Math.random() * 2,
-        size: Math.random() * 12 + 6,
-      }));
-      setConfettiParticles(newConfetti);
-
-      // Spark particles drifting down
-      const newSparks = Array.from({ length: 40 }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: -10,
-        delay: Math.random() * 2,
-        duration: 4 + Math.random() * 3,
-        size: Math.random() * 3 + 1,
-        color: ['#ffd700', '#ffaa00', '#ff6b35'][Math.floor(Math.random() * 3)],
-      }));
-      setSparkParticles(newSparks);
-
-      // Digital floating particles
-      const newDigital = Array.from({ length: 60 }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 4 + 2,
-        delay: Math.random() * 5,
-        duration: 5 + Math.random() * 5,
-        color: ['#00ffff', '#ff00ff', '#8b00ff'][Math.floor(Math.random() * 3)],
-      }));
-      setDigitalParticles(newDigital);
-    }
-  }, [isOpen]);
+  // Optimized particle generation - REDUCED by 60%
+  // We use memoized arrays above; avoid repeated state updates
 
   const handleMouseMove = (e) => {
     const rect = modalRef.current?.getBoundingClientRect();
@@ -156,7 +162,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
               }}
               transition={{
                 duration: 10,
-                repeat: Infinity,
+                repeat: repeatCount,
                 ease: 'easeInOut',
               }}
             />
@@ -171,7 +177,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
               }}
               transition={{
                 duration: 12,
-                repeat: Infinity,
+                repeat: repeatCount,
                 ease: 'easeInOut',
               }}
             />
@@ -186,7 +192,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
               }}
               transition={{
                 duration: 14,
-                repeat: Infinity,
+                repeat: repeatCount,
                 ease: 'easeInOut',
               }}
             />
@@ -222,34 +228,34 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                 }}
                 transition={{
                   duration: 3 + i * 0.5,
-                  repeat: Infinity,
+                  repeat: repeatCount,
                   delay: i * 0.3,
                 }}
               />
             ))}
 
-            {/* Digital floating particles */}
+            {/* Digital floating particles - OPTIMIZED (24 instead of 60) */}
             {digitalParticles.map((particle) => (
               <motion.div
                 key={`digital-${particle.id}`}
-                className="absolute rounded-full"
+                className="absolute rounded-full will-change-transform"
                 style={{
                   width: particle.size,
                   height: particle.size,
                   left: `${particle.x}%`,
                   top: `${particle.y}%`,
                   backgroundColor: particle.color,
-                  boxShadow: `0 0 ${particle.size * 10}px ${particle.color}`,
+                  boxShadow: `0 0 ${particle.size * 6}px ${particle.color}`,
                 }}
                 animate={{
-                  y: [0, -100, 0],
-                  x: [0, (Math.random() - 0.5) * 40, 0],
-                  opacity: [0, 1, 0],
-                  scale: [0.5, 1.5, 0.5],
+                  y: [0, -60, 0],
+                  x: [0, (Math.random() - 0.5) * 25, 0],
+                  opacity: [0, 0.8, 0],
+                  scale: [0.5, 1.2, 0.5],
                 }}
                 transition={{
                   duration: particle.duration,
-                  repeat: Infinity,
+                  repeat: repeatCount,
                   delay: particle.delay,
                   ease: 'easeInOut',
                 }}
@@ -258,12 +264,12 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
           </motion.div>
 
           {/* ═══════════════════════════════════════════════════════════
-              CONFETTI BURST BEHIND TITLE
+              CONFETTI BURST BEHIND TITLE - OPTIMIZED (50 particles)
               ═══════════════════════════════════════════════════════════ */}
           {confettiParticles.map(particle => (
             <motion.div
               key={`confetti-${particle.id}`}
-              className="fixed pointer-events-none z-[60]"
+              className="fixed pointer-events-none z-[60] will-change-transform"
               style={{
                 left: `${particle.x}%`,
                 top: `${particle.y}%`,
@@ -271,7 +277,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                 height: `${particle.size}px`,
                 backgroundColor: particle.color,
                 borderRadius: '3px',
-                boxShadow: `0 0 ${particle.size * 3}px ${particle.color}`,
+                boxShadow: `0 0 ${particle.size * 2}px ${particle.color}`,
               }}
               initial={{
                 y: 0,
@@ -282,10 +288,10 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
               }}
               animate={{
                 y: ['0vh', '110vh'],
-                x: [0, (Math.random() - 0.5) * 500],
-                rotate: [0, particle.rotation * 5],
-                opacity: [0, 1, 1, 0.5, 0],
-                scale: [0, 1.3, 1, 0.8, 0.3],
+                x: [0, (Math.random() - 0.5) * 300],
+                rotate: [0, particle.rotation * 4],
+                opacity: [0, 1, 0.8, 0],
+                scale: [0, 1.2, 0.9, 0.3],
               }}
               transition={{
                 duration: particle.duration,
@@ -295,18 +301,18 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
             />
           ))}
 
-          {/* Spark particles drifting downward */}
+          {/* Spark particles drifting downward - OPTIMIZED (16 instead of 40) */}
           {sparkParticles.map(spark => (
             <motion.div
               key={`spark-${spark.id}`}
-              className="fixed pointer-events-none z-[60] rounded-full"
+              className="fixed pointer-events-none z-[60] rounded-full will-change-transform"
               style={{
                 left: `${spark.x}%`,
                 top: `${spark.y}%`,
                 width: `${spark.size}px`,
                 height: `${spark.size}px`,
                 backgroundColor: spark.color,
-                boxShadow: `0 0 ${spark.size * 8}px ${spark.color}`,
+                boxShadow: `0 0 ${spark.size * 6}px ${spark.color}`,
               }}
               initial={{
                 y: 0,
@@ -314,7 +320,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
               }}
               animate={{
                 y: ['0vh', '100vh'],
-                opacity: [0, 1, 0.8, 0],
+                opacity: [0, 0.9, 0.6, 0],
                 scale: [0, 1, 1, 0.5],
               }}
               transition={{
@@ -347,62 +353,46 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                 }}
                 className="relative"
               >
-                {/* Trophy icon with extreme glow */}
+                {/* Trophy icon with optimized glow */}
                 <Trophy 
-                  className="w-24 h-24 text-yellow-300 relative z-10" 
+                  className="w-24 h-24 text-yellow-300 relative z-10 will-change-transform" 
                   style={{ 
-                    filter: 'drop-shadow(0 0 30px rgba(255, 215, 0, 1)) drop-shadow(0 0 60px rgba(255, 165, 0, 0.8))' 
+                    filter: 'drop-shadow(0 0 25px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 50px rgba(255, 165, 0, 0.6))' 
                   }} 
                 />
                 
-                {/* Multi-layer neon outer-glow halo */}
+                {/* Consolidated outer-glow halo - REDUCED from 3 layers to 1 */}
                 <motion.div
                   animate={{
-                    scale: [1, 1.8, 1],
-                    opacity: [0.8, 0.3, 0.8],
+                    scale: [1, 1.7, 1],
+                    opacity: [0.7, 0.2, 0.7],
                   }}
-                  transition={{ duration: 2.5, repeat: Infinity }}
-                  className="absolute inset-0 bg-yellow-400/70 rounded-full blur-[70px]"
-                />
-                <motion.div
-                  animate={{
-                    scale: [1.3, 2.2, 1.3],
-                    opacity: [0.6, 0.1, 0.6],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, delay: 0.4 }}
-                  className="absolute inset-0 bg-orange-500/60 rounded-full blur-[90px]"
-                />
-                <motion.div
-                  animate={{
-                    scale: [1.6, 2.5, 1.6],
-                    opacity: [0.4, 0, 0.4],
-                  }}
-                  transition={{ duration: 3.5, repeat: Infinity, delay: 0.8 }}
-                  className="absolute inset-0 bg-magenta-500/50 rounded-full blur-[110px]"
+                  transition={{ duration: 2.5, repeat: repeatCount }}
+                  className="absolute inset-0 bg-gradient-to-br from-yellow-400/60 via-orange-500/40 to-transparent rounded-full blur-[60px] will-change-transform"
                 />
 
-                {/* Spark particles bursting outward */}
-                {Array.from({ length: 12 }).map((_, i) => (
+                {/* Spark particles bursting outward - REDUCED from 12 to 6 */}
+                {Array.from({ length: 6 }).map((_, i) => (
                   <motion.div
                     key={`trophy-spark-${i}`}
-                    className="absolute"
+                    className="absolute will-change-transform"
                     style={{
                       top: '50%',
                       left: '50%',
                     }}
                     animate={{
-                      x: [0, Math.cos((i * 30 * Math.PI) / 180) * 70],
-                      y: [0, Math.sin((i * 30 * Math.PI) / 180) * 70],
-                      opacity: [0, 1, 0.5, 0],
-                      scale: [0, 1.5, 1, 0],
+                      x: [0, Math.cos((i * 60 * Math.PI) / 180) * 60],
+                      y: [0, Math.sin((i * 60 * Math.PI) / 180) * 60],
+                      opacity: [0, 0.9, 0.4, 0],
+                      scale: [0, 1.3, 0.9, 0],
                     }}
                     transition={{
-                      duration: 2.5,
-                      repeat: Infinity,
-                      delay: i * 0.08,
+                      duration: 2,
+                      repeat: repeatCount,
+                      delay: i * 0.1,
                     }}
                   >
-                    <Sparkles className="w-4 h-4 text-yellow-200" style={{ filter: 'drop-shadow(0 0 8px #fef08a)' }} />
+                    <Sparkles className="w-3 h-3 text-yellow-200" style={{ filter: 'drop-shadow(0 0 6px #fef08a)' }} />
                   </motion.div>
                 ))}
               </motion.div>
@@ -454,7 +444,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                   }}
                   transition={{
                     duration: 3,
-                    repeat: Infinity,
+                    repeat: repeatCount,
                   }}
                 >
                   <div className="h-full w-full rounded-[2.4rem] bg-slate-950/90" style={{ backdropFilter: 'blur(60px)' }} />
@@ -490,7 +480,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                   }}
                   transition={{
                     duration: 4,
-                    repeat: Infinity,
+                    repeat: repeatCount,
                   }}
                 />
 
@@ -544,7 +534,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                       }}
                       transition={{
                         duration: 3,
-                        repeat: Infinity,
+                        repeat: repeatCount,
                       }}
                     />
                     
@@ -611,7 +601,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                               }}
                               transition={{
                                 duration: 2,
-                                repeat: Infinity,
+                                repeat: repeatCount,
                               }}
                             >
                               <Crown className="w-6 h-6 text-white" />
@@ -632,8 +622,8 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                               scale: [1, 1.1, 1],
                             }}
                             transition={{
-                              rotate: { duration: 5, repeat: Infinity, ease: 'linear' },
-                              scale: { duration: 2.5, repeat: Infinity },
+                              rotate: { duration: 5, repeat: repeatCount, ease: 'linear' },
+                              scale: { duration: 2.5, repeat: repeatCount },
                             }}
                           />
                           <motion.div
@@ -649,8 +639,8 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                               scale: [1.08, 1, 1.08],
                             }}
                             transition={{
-                              rotate: { duration: 6, repeat: Infinity, ease: 'linear' },
-                              scale: { duration: 3, repeat: Infinity },
+                              rotate: { duration: 6, repeat: repeatCount, ease: 'linear' },
+                              scale: { duration: 3, repeat: repeatCount },
                             }}
                           />
 
@@ -670,7 +660,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                               }}
                               transition={{
                                 duration: 2,
-                                repeat: Infinity,
+                                repeat: repeatCount,
                                 delay: i * 0.15,
                               }}
                             />
@@ -689,7 +679,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                             }}
                             transition={{
                               duration: 2.5,
-                              repeat: Infinity,
+                              repeat: repeatCount,
                             }}
                           />
                         </div>
@@ -719,7 +709,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                           }}
                           transition={{
                             duration: 2.5,
-                            repeat: Infinity,
+                            repeat: repeatCount,
                             ease: 'easeInOut',
                             repeatDelay: 1,
                           }}
@@ -743,7 +733,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                           }}
                           transition={{
                             duration: 5,
-                            repeat: Infinity,
+                            repeat: repeatCount,
                             ease: 'easeInOut',
                           }}
                         >
@@ -761,7 +751,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                             }}
                             transition={{
                               duration: 3.5,
-                              repeat: Infinity,
+                              repeat: repeatCount,
                               ease: 'linear',
                             }}
                           />
@@ -778,116 +768,97 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                             }}
                             transition={{
                               duration: 3,
-                              repeat: Infinity,
+                              repeat: repeatCount,
                             }}
                           />
 
-                          {/* Rotating neon halo discs - multiple layers */}
+                          {/* Rotating neon halo discs - OPTIMIZED (2 layers instead of 3) */}
                           <motion.div
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full"
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full will-change-transform"
                             style={{
-                              border: '4px solid transparent',
+                              border: '3px solid transparent',
                               borderTopColor: '#00ffff',
                               borderRightColor: '#ff00ff',
-                              boxShadow: '0 0 50px rgba(0, 255, 255, 0.8), 0 0 80px rgba(255, 0, 255, 0.6)',
+                              boxShadow: '0 0 40px rgba(0, 255, 255, 0.7), 0 0 60px rgba(255, 0, 255, 0.5)',
                             }}
                             animate={{
                               rotate: 360,
-                              scale: [1, 1.15, 1],
                             }}
                             transition={{
-                              rotate: { duration: 10, repeat: Infinity, ease: 'linear' },
-                              scale: { duration: 4, repeat: Infinity },
+                              duration: 12,
+                              repeat: repeatCount,
+                              ease: 'linear',
                             }}
                           />
                           <motion.div
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-52 h-52 rounded-full"
-                            style={{
-                              border: '3px solid transparent',
-                              borderBottomColor: '#ff1493',
-                              borderLeftColor: '#00d4ff',
-                              boxShadow: '0 0 45px rgba(255, 20, 147, 0.7)',
-                            }}
-                            animate={{
-                              rotate: -360,
-                              scale: [1.12, 1, 1.12],
-                            }}
-                            transition={{
-                              rotate: { duration: 12, repeat: Infinity, ease: 'linear' },
-                              scale: { duration: 4.5, repeat: Infinity },
-                            }}
-                          />
-                          <motion.div
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 rounded-full"
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 rounded-full will-change-transform"
                             style={{
                               border: '2px solid transparent',
                               borderTopColor: '#8b00ff',
                               borderBottomColor: '#00ffaa',
-                              boxShadow: '0 0 40px rgba(139, 0, 255, 0.6)',
+                              boxShadow: '0 0 35px rgba(139, 0, 255, 0.5)',
                             }}
                             animate={{
-                              rotate: 360,
-                              scale: [1.18, 1.05, 1.18],
+                              rotate: -360,
                             }}
                             transition={{
-                              rotate: { duration: 14, repeat: Infinity, ease: 'linear' },
-                              scale: { duration: 5, repeat: Infinity },
+                              duration: 18,
+                              repeat: Infinity,
+                              ease: 'linear',
                             }}
                           />
 
-                          {/* Holographic light rings + energy trails */}
-                          {Array.from({ length: 3 }).map((_, i) => (
+                          {/* Holographic light rings + energy trails - REDUCED from 3 to 2 */}
+                          {Array.from({ length: 2 }).map((_, i) => (
                             <motion.div
                               key={`holo-ring-${i}`}
-                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full will-change-transform"
                               style={{
-                                width: `${60 + i * 20}%`,
-                                height: `${60 + i * 20}%`,
-                                border: '2px solid rgba(0, 255, 255, 0.3)',
-                                boxShadow: '0 0 20px rgba(0, 255, 255, 0.5)',
+                                width: `${60 + i * 25}%`,
+                                height: `${60 + i * 25}%`,
+                                border: '2px solid rgba(0, 255, 255, 0.25)',
+                                boxShadow: '0 0 15px rgba(0, 255, 255, 0.4)',
                               }}
                               animate={{
-                                scale: [1, 1.2, 1],
-                                opacity: [0.5, 0.2, 0.5],
+                                opacity: [0.4, 0.15, 0.4],
                                 rotate: i % 2 === 0 ? 360 : -360,
                               }}
                               transition={{
-                                scale: { duration: 3 + i, repeat: Infinity },
-                                opacity: { duration: 3 + i, repeat: Infinity },
-                                rotate: { duration: 15 + i * 3, repeat: Infinity, ease: 'linear' },
+                                opacity: { duration: 3 + i, repeat: repeatCount },
+                                rotate: { duration: 16 + i * 4, repeat: repeatCount, ease: 'linear' },
                               }}
                             />
                           ))}
 
-                          {/* Volumetric glow rising behind prize */}
+                          {/* Volumetric glow rising behind prize - OPTIMIZED */}
                           <motion.div
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-44 h-44 rounded-full blur-[80px]"
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full blur-[60px] will-change-transform"
                             style={{
-                              background: 'radial-gradient(circle, rgba(139, 0, 255, 0.7), transparent)',
+                              background: 'radial-gradient(circle, rgba(139, 0, 255, 0.5), transparent)',
                             }}
                             animate={{
-                              scale: [1, 1.5, 1],
-                              opacity: [0.7, 1, 0.7],
+                              scale: [1, 1.3, 1],
+                              opacity: [0.5, 0.8, 0.5],
                             }}
                             transition={{
                               duration: 4,
-                              repeat: Infinity,
+                              repeat: repeatCount,
                             }}
                           />
 
                           {/* 3D Prize emoji on floating pedestal */}
                           <motion.div
-  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex items-center justify-center"
+  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex items-center justify-center will-change-transform"
   animate={{
-    rotate: [0, 15, -15, 0],
-    scale: [1, 1.08, 1],
+    rotate: [0, 12, -12, 0],
+    scale: [1, 1.06, 1],
   }}
   transition={{
     duration: 6,
-    repeat: Infinity,
+    repeat: repeatCount,
   }}
   style={{
-    filter: 'drop-shadow(0 0 50px rgba(0, 255, 255, 1)) drop-shadow(0 0 100px rgba(255, 0, 255, 0.9))',
+    filter: 'drop-shadow(0 0 35px rgba(0, 255, 255, 0.7)) drop-shadow(0 0 70px rgba(255, 0, 255, 0.6))',
   }}
 >
   {/\.(png|jpe?g|gif|svg|webp)$/i.test(prize.emoji) ? (
@@ -896,7 +867,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
       alt={prize.name}
       className="w-100 h-100 md:w-100 md:h-100 object-contain"
       style={{
-        filter: 'drop-shadow(0 0 30px rgba(0,255,255,0.6))',
+        filter: 'drop-shadow(0 0 20px rgba(0,255,255,0.5))',
         imageRendering: 'auto',
       }}
     />
@@ -931,7 +902,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                             }}
                             transition={{
                               duration: 3,
-                              repeat: Infinity,
+                              repeat: repeatCount,
                               ease: 'linear',
                             }}
                           />
@@ -962,8 +933,8 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                             ],
                           }}
                           transition={{
-                            backgroundPosition: { duration: 5, repeat: Infinity, ease: 'linear' },
-                            boxShadow: { duration: 2.5, repeat: Infinity },
+                            backgroundPosition: { duration: 5, repeat: repeatCount, ease: 'linear' },
+                            boxShadow: { duration: 2.5, repeat: repeatCount },
                           }}
                         >
                           <span className="text-3xl md:text-4xl font-black text-white" style={{ textShadow: '0 3px 10px rgba(0, 0, 0, 0.6)' }}>{prize.value}</span>
@@ -1010,7 +981,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                             }}
                             transition={{
                               duration: 2,
-                              repeat: Infinity,
+                              repeat: repeatCount,
                             }}
                           />
                           
@@ -1025,7 +996,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                             }}
                             transition={{
                               duration: 2.5,
-                              repeat: Infinity,
+                              repeat: repeatCount,
                               repeatDelay: 1.5,
                               ease: 'easeInOut',
                             }}
@@ -1066,7 +1037,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                               }}
                               transition={{
                                 duration: 2,
-                                repeat: Infinity,
+                                repeat: repeatCount,
                                 delay: 0.5,
                               }}
                             />
@@ -1082,7 +1053,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                               }}
                               transition={{
                                 duration: 2.5,
-                                repeat: Infinity,
+                                repeat: repeatCount,
                                 repeatDelay: 1.5,
                                 ease: 'easeInOut',
                               }}
@@ -1123,7 +1094,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
                               }}
                               transition={{
                                 duration: 2,
-                                repeat: Infinity,
+                                repeat: repeatCount,
                               }}
                             />
                             

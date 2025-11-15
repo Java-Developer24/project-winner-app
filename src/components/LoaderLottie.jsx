@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /**
  * Premium $200k Loading Experience
@@ -18,6 +19,8 @@ export default function LoaderLottie({ className = '' }) {
   // Mouse parallax for micro camera movement
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const prefersReducedMotion = useReducedMotion();
+  const repeatCount = prefersReducedMotion ? 0 : Infinity;
   
   const rotateX = useTransform(mouseY, [-300, 300], [5, -5]);
   const rotateY = useTransform(mouseX, [-300, 300], [-5, 5]);
@@ -63,7 +66,7 @@ export default function LoaderLottie({ className = '' }) {
             }}
             transition={{
               duration: 2,
-              repeat: Infinity,
+              repeat: repeatCount,
               delay: i * 0.1,
             }}
           />
@@ -77,8 +80,8 @@ export default function LoaderLottie({ className = '' }) {
             scale: [1, 1.1, 1],
           }}
           transition={{
-            rotate: { duration: 4, repeat: Infinity, ease: 'linear' },
-            scale: { duration: 2, repeat: Infinity },
+            rotate: { duration: 4, repeat: repeatCount, ease: 'linear' },
+            scale: { duration: 2, repeat: repeatCount },
           }}
           style={{
             boxShadow: '0 0 40px rgba(168, 85, 247, 0.6), inset 0 0 40px rgba(168, 85, 247, 0.4)',
@@ -93,8 +96,8 @@ export default function LoaderLottie({ className = '' }) {
             scale: [1, 1.15, 1],
           }}
           transition={{
-            rotate: { duration: 3, repeat: Infinity, ease: 'linear' },
-            scale: { duration: 1.5, repeat: Infinity },
+            rotate: { duration: 3, repeat: repeatCount, ease: 'linear' },
+            scale: { duration: 1.5, repeat: repeatCount },
           }}
           style={{
             boxShadow: '0 0 30px rgba(236, 72, 153, 0.6), inset 0 0 30px rgba(236, 72, 153, 0.4)',
@@ -109,8 +112,8 @@ export default function LoaderLottie({ className = '' }) {
             scale: [1, 1.2, 1],
           }}
           transition={{
-            rotate: { duration: 2, repeat: Infinity, ease: 'linear' },
-            scale: { duration: 1, repeat: Infinity },
+            rotate: { duration: 2, repeat: repeatCount, ease: 'linear' },
+            scale: { duration: 1, repeat: repeatCount },
           }}
           style={{
             boxShadow: '0 0 20px rgba(255, 215, 0, 0.8), inset 0 0 20px rgba(255, 215, 0, 0.6)',
@@ -159,7 +162,7 @@ export default function LoaderLottie({ className = '' }) {
               }}
               transition={{
                 duration: 2,
-                repeat: Infinity,
+                repeat: repeatCount,
                 delay: i * 0.2,
               }}
             />
@@ -179,7 +182,7 @@ export default function LoaderLottie({ className = '' }) {
             }}
             transition={{
               duration: 1.5,
-              repeat: Infinity,
+              repeat: repeatCount,
             }}
           />
         </motion.div>
@@ -227,7 +230,7 @@ export default function LoaderLottie({ className = '' }) {
               }}
               transition={{
                 duration: 4,
-                repeat: Infinity,
+                repeat: repeatCount,
                 ease: 'linear',
                 delay: i * 0.1,
               }}

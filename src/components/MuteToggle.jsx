@@ -3,6 +3,7 @@
 import { Volume2, VolumeX } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSound } from '@/hooks/useSound';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /**
  * Premium floating mute toggle button
@@ -11,6 +12,8 @@ import { useSound } from '@/hooks/useSound';
  */
 export default function MuteToggle({ className = '' }) {
   const { muted, toggleMute } = useSound();
+  const prefersReducedMotion = useReducedMotion();
+  const repeatCount = prefersReducedMotion ? 0 : Infinity;
 
   return (
     <motion.button
@@ -31,13 +34,13 @@ export default function MuteToggle({ className = '' }) {
       {!muted && (
         <motion.div
           className="absolute inset-0 rounded-full border-2 border-purple-400"
-          animate={{
+          animate={prefersReducedMotion ? {} : {
             scale: [1, 1.5, 1],
             opacity: [0.5, 0, 0.5],
           }}
           transition={{
             duration: 2,
-            repeat: Infinity,
+            repeat: repeatCount,
             ease: "easeInOut",
           }}
         />

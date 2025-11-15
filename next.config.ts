@@ -5,6 +5,7 @@ const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader
 
 const nextConfig: NextConfig = {
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -15,6 +16,11 @@ const nextConfig: NextConfig = {
         hostname: '**',
       },
     ],
+    // Cache optimized images for 365 days in production
+    minimumCacheTTL: 31536000,
+    // Enable responsive image optimization
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   outputFileTracingRoot: path.resolve(__dirname, '../../'),
   typescript: {
@@ -22,6 +28,10 @@ const nextConfig: NextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  // Experimental optimizations
+  experimental: {
+    optimizePackageImports: ["framer-motion"],
   },
   turbopack: {
     rules: {

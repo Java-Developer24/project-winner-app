@@ -1,12 +1,14 @@
 'use client';
 
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export const GoDaddyLoader = ({ onComplete }) => {
   const [stage, setStage] = useState('skeleton'); // skeleton, formation, assembly, reveal, complete
   const [particles, setParticles] = useState([]);
   const prefersReducedMotion = useReducedMotion();
+  const repeatCount = prefersReducedMotion ? 0 : Infinity;
 
   useEffect(() => {
     // Generate particles for animation - PREMIUM QUALITY
@@ -95,7 +97,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
             }}
             transition={{
               duration: 15,
-              repeat: Infinity,
+              repeat: repeatCount,
               ease: [0.45, 0.05, 0.55, 0.95],
             }}
           />
@@ -112,7 +114,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
             }}
             transition={{
               duration: 18,
-              repeat: Infinity,
+              repeat: repeatCount,
               ease: 'easeInOut',
             }}
           />
@@ -130,7 +132,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
             }}
             transition={{
               duration: 12,
-              repeat: Infinity,
+              repeat: repeatCount,
               ease: [0.45, 0.05, 0.55, 0.95],
             }}
           />
@@ -157,7 +159,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
                 }}
                 transition={{
                   duration: 8 + Math.random() * 4,
-                  repeat: Infinity,
+                  repeat: repeatCount,
                   delay: Math.random() * 5,
                   ease: 'easeInOut',
                 }}
@@ -569,3 +571,5 @@ export const GoDaddyLoader = ({ onComplete }) => {
     </AnimatePresence>
   );
 };
+
+export default GoDaddyLoader;

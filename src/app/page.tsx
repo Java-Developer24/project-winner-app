@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import HomeHero from '@/components/HomeHero';
-import { GoDaddyLoader } from '@/components/GoDaddyLoader';
+import GoDaddyLoader from '@/components/GoDaddyLoader';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +21,11 @@ export default function Home() {
     setIsLoading(false);
     setHasLoaded(true);
     // Mark loader as shown for this session
-    sessionStorage.setItem('godaddy-loader-shown', 'true');
+    try {
+      sessionStorage.setItem('godaddy-loader-shown', 'true');
+    } catch (e) {
+      // Ignore storage errors (e.g., SSR or privacy settings)
+    }
   };
 
   return (

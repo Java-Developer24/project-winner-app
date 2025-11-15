@@ -205,7 +205,7 @@
     background: radial-gradient(circle, var(--tw-gradient-stops));
   }
 
-  /* Reduced motion fallbacks */
+  /* Reduced motion fallbacks - OPTIMIZED */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -213,6 +213,35 @@
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    /* Disable blur on reduced motion for better performance */
+    [style*="filter: blur"],
+    [style*="filter:'blur"] {
+      filter: none !important;
+    }
+  }
+
+  /* GPU acceleration hints */
+  motion-div,
+  [style*="transform"],
+  [style*="will-change"] {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Optimize blur filters */
+  .blur-xl,
+  .blur-2xl {
+    will-change: filter;
+  }
+
+  /* Font optimization */
+  @supports (font-display: optional) {
+    @font-face {
+      font-display: optional;
     }
   }
 }

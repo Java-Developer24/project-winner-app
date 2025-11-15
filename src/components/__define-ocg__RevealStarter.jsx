@@ -17,12 +17,15 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useSeededPick } from '@/hooks/useSeededPick';
 import soundSystem from '@/lib/soundSystem';
 
 export default function RevealStarter({ seed, onStart, className = '' }) {
   const [isReady, setIsReady] = useState(false);
   const { winner, prize } = useSeededPick(seed);
+  const prefersReducedMotion = useReducedMotion();
+  const repeatCount = prefersReducedMotion ? 0 : Infinity;
 
   useEffect(() => {
     // Initialize sound system
@@ -64,7 +67,7 @@ export default function RevealStarter({ seed, onStart, className = '' }) {
         }}
         transition={{
           duration: 2,
-          repeat: Infinity,
+          repeat: repeatCount,
           ease: 'easeInOut',
         }}
       >

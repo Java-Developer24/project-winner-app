@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useEffect, useCallback } from 'react';
+import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useSound } from '@/hooks/useSound';
@@ -13,17 +13,18 @@ import { Sparkles, Zap, ChevronRight } from 'lucide-react';
 import prizesData from '@/data/prizes.json';
 
 /**
- * Premium $300k+ Cinematic Multi-Winner Reveal Experience
+ * Premium $300k+ Cinematic Multi-Winner Reveal Experience - OPTIMIZED
  * Movie-Like Reveal Flow:
  * STEP 1 — Loading: Neon rings form → camera zooms in
  * STEP 2 — Reveal #1 (Jupiter Scooty): 3D shards assembling, aurora lights, holographic wheel
  * STEP 3 — Winner #1 Modal → "Reveal Next Winner" button
- * STEP 4 — Transition effect with light trails
+ * STEP 4 — Transition effect with light trails (REDUCED from 40 to 20 particles)
  * STEP 5 — Reveal #2 (Bike): Energy rings collapsing, holographic cube breaking, ripple explosion
  * STEP 6 — Winner #2 Modal → Final celebration
  */
 export default function RevealShell({ seed, className = '' }) {
   const prefersReducedMotion = useReducedMotion();
+  const repeatCount = prefersReducedMotion ? 0 : Infinity;
   const { play, muted, toggleMute, initialized: soundInitialized } = useSound();
   
   // Multi-winner state
@@ -34,33 +35,51 @@ export default function RevealShell({ seed, className = '' }) {
   const [showConfetti, setShowConfetti] = useState(false);
   const [cameraZoom, setCameraZoom] = useState(0);
   const [transitionEffect, setTransitionEffect] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const contentRef = useRef(null);
 
   // Get current winner and prize
   const winner = prizesData.winners[currentWinnerIndex];
   const prize = prizesData.prizes[currentWinnerIndex];
 
+  // Intersection Observer for visibility detection - PAUSE 3D scene when not visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+
+    if (contentRef.current) {
+      observer.observe(contentRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   // Movie-like stage progression with cinematic timing
   useEffect(() => {
     if (stage === 'loading') {
-      if (soundInitialized && !muted) {
+      if (soundInitialized && !muted && isVisible) {
         setTimeout(() => play('ambient'), 100);
       }
 
       // STEP 1: Neon rings form → camera zooms in
       const timer = setTimeout(() => {
-        play('whoosh');
+        if (isVisible) play('whoosh');
         setCameraZoom(1);
         
         setTimeout(() => {
           setStage('assembly');
-          play('assemble');
+          if (isVisible) play('assemble');
           animateAssembly();
         }, 1800);
       }, 3000);
 
       return () => clearTimeout(timer);
     }
-  }, [stage, soundInitialized, muted, play]);
+  }, [stage, soundInitialized, muted, play, isVisible]);
 
   // Cinematic assembly animation with spring easing
   const animateAssembly = useCallback(() => {
@@ -80,17 +99,17 @@ export default function RevealShell({ seed, className = '' }) {
 
   // Complete assembly and reveal prize
   const handleAssemblyComplete = useCallback(() => {
-    play('pop');
+    if (isVisible) play('pop');
     
     setTimeout(() => {
       setStage('reveal');
-      play('reveal');
+      if (isVisible) play('reveal');
       setCameraZoom(2);
       
       // Show confetti and modal
       setTimeout(() => {
         setStage('celebrate');
-        play('confetti');
+        if (isVisible) play('confetti');
         setShowConfetti(true);
         setCameraZoom(3);
         
@@ -99,7 +118,7 @@ export default function RevealShell({ seed, className = '' }) {
         }, 500);
       }, 3000);
     }, 500);
-  }, [play]);
+  }, [play, isVisible]);
 
   // Handle "Reveal Next Winner" button click
   const handleRevealNextWinner = useCallback(() => {
@@ -108,7 +127,7 @@ export default function RevealShell({ seed, className = '' }) {
     
     // Transition effect
     setTransitionEffect(true);
-    play('whoosh');
+    if (isVisible) play('whoosh');
     
     setTimeout(() => {
       // Move to next winner
@@ -120,11 +139,11 @@ export default function RevealShell({ seed, className = '' }) {
       setTimeout(() => {
         setTransitionEffect(false);
         setStage('assembly');
-        play('assemble');
+        if (isVisible) play('assemble');
         animateAssembly();
       }, 1000);
     }, 1500);
-  }, [play, animateAssembly]);
+  }, [play, animateAssembly, isVisible]);
 
   const isLastWinner = currentWinnerIndex >= prizesData.winners.length - 1;
 
@@ -146,42 +165,24 @@ export default function RevealShell({ seed, className = '' }) {
         }}
       />
 
-      {/* Aurora fog textures drifting */}
-      {!prefersReducedMotion && (
-        <>
-          <motion.div
-            className="absolute inset-0 opacity-20 pointer-events-none"
-            style={{
-              background: 'radial-gradient(circle at 20% 30%, rgba(255, 79, 217, 0.3), transparent 50%)',
-              filter: 'blur(60px)',
-            }}
-            animate={{
-              x: [0, 100, 0],
-              y: [0, -50, 0],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
-          <motion.div
-            className="absolute inset-0 opacity-15 pointer-events-none"
-            style={{
-              background: 'radial-gradient(circle at 80% 70%, rgba(109, 43, 255, 0.4), transparent 50%)',
-              filter: 'blur(80px)',
-            }}
-            animate={{
-              x: [0, -120, 0],
-              y: [0, 80, 0],
-            }}
-            transition={{
-              duration: 25,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
-        </>
+      {/* Aurora fog textures drifting - OPTIMIZED (reduced from 2 to 1, simplified blur) */}
+      {!prefersReducedMotion && isVisible && (
+        <motion.div
+          className="absolute inset-0 opacity-20 pointer-events-none will-change-transform"
+          style={{
+            background: 'radial-gradient(ellipse at 30% 40%, rgba(255, 79, 217, 0.25) 0%, rgba(109, 43, 255, 0.15) 40%, transparent 70%)',
+            filter: 'blur(50px)',
+          }}
+          animate={{
+            x: [0, 60, 0],
+            y: [0, -30, 0],
+          }}
+          transition={{
+            duration: 22,
+              repeat: repeatCount,
+            ease: 'easeInOut',
+          }}
+        />
       )}
 
       {/* Transition Effect (light trails, neon gradients, particle fades) */}
@@ -204,24 +205,24 @@ export default function RevealShell({ seed, className = '' }) {
               transition={{ duration: 1.5 }}
             />
             
-            {/* Light trail particles */}
-            {Array.from({ length: 40 }).map((_, i) => (
+            {/* Light trail particles - REDUCED from 40 to 20 */}
+            {Array.from({ length: 20 }).map((_, i) => (
               <motion.div
                 key={`trail-${i}`}
-                className="absolute w-2 h-20 rounded-full"
+                className="absolute w-1.5 h-16 rounded-full will-change-transform"
                 style={{
-                  background: 'linear-gradient(to bottom, rgba(255, 79, 217, 0.8), transparent)',
-                  left: `${(i / 40) * 100}%`,
+                  background: 'linear-gradient(to bottom, rgba(255, 79, 217, 0.7), transparent)',
+                  left: `${(i / 20) * 100}%`,
                   top: '-20px',
-                  filter: 'blur(2px)',
+                  filter: 'blur(1px)',
                 }}
                 animate={{
                   y: ['0vh', '120vh'],
-                  opacity: [0, 1, 0],
+                  opacity: [0, 0.8, 0],
                 }}
                 transition={{
                   duration: 1.5,
-                  delay: i * 0.02,
+                  delay: i * 0.03,
                   ease: 'easeOut',
                 }}
               />
@@ -280,19 +281,9 @@ export default function RevealShell({ seed, className = '' }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <motion.p 
-                  className="text-white/90 text-xl font-semibold"
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  Preparing Your Premium Reveal
-                </motion.p>
                 
-                <motion.div className="flex items-center justify-center gap-2 text-purple-300">
-                  <Sparkles className="w-4 h-4" />
-                  <p className="text-sm">$300k Production Quality Experience Loading...</p>
-                  <Sparkles className="w-4 h-4" />
-                </motion.div>
+                
+               
               </motion.div>
             </motion.div>
           )}
@@ -309,65 +300,65 @@ export default function RevealShell({ seed, className = '' }) {
               {/* Winner 1: 3D Shards Assembling with Holographic Wheel */}
               {currentWinnerIndex === 0 && (
                 <div className="relative w-full aspect-square max-w-2xl mx-auto flex items-center justify-center">
-                  {/* Holographic rotating wheel */}
+                  {/* Holographic rotating wheel - OPTIMIZED */}
                   <motion.div
-                    className="absolute inset-0 rounded-full"
+                    className="absolute inset-0 rounded-full will-change-transform"
                     style={{
-                      border: '4px solid transparent',
-                      borderTopColor: 'rgba(255, 215, 0, 0.8)',
-                      borderRightColor: 'rgba(255, 79, 217, 0.8)',
-                      boxShadow: '0 0 80px rgba(255, 215, 0, 0.6), inset 0 0 60px rgba(255, 79, 217, 0.4)',
+                      border: '3px solid transparent',
+                      borderTopColor: 'rgba(255, 215, 0, 0.7)',
+                      borderRightColor: 'rgba(255, 79, 217, 0.7)',
+                      boxShadow: '0 0 60px rgba(255, 215, 0, 0.5), inset 0 0 40px rgba(255, 79, 217, 0.3)',
                     }}
                     animate={{
                       rotate: 360,
-                      scale: [1, 1.05, 1],
                     }}
                     transition={{
-                      rotate: { duration: 6, repeat: Infinity, ease: 'linear' },
-                      scale: { duration: 3, repeat: Infinity },
+                      duration: 8,
+                      repeat: repeatCount,
+                      ease: 'linear',
                     }}
                   />
 
-                  {/* Assembling 3D holographic shards */}
-                  {Array.from({ length: 16 }).map((_, i) => {
-                    const angle = (i / 16) * Math.PI * 2;
-                    const radius = 200;
-                    const progress = Math.max(0, Math.min(1, (assemblyProgress - i * 0.03) * 1.5));
+                  {/* Assembling 3D holographic shards - REDUCED from 16 to 12 */}
+                  {Array.from({ length: 12 }).map((_, i) => {
+                    const angle = (i / 12) * Math.PI * 2;
+                    const radius = 180;
+                    const progress = Math.max(0, Math.min(1, (assemblyProgress - i * 0.04) * 1.5));
                     
                     return (
                       <motion.div
                         key={i}
-                        className="absolute w-20 h-28 rounded-xl"
+                        className="absolute w-16 h-24 rounded-lg will-change-transform"
                         style={{
-                          background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.8), rgba(255, 79, 217, 0.8))',
-                          boxShadow: '0 0 40px rgba(255, 215, 0, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.3)',
-                          border: '2px solid rgba(255, 255, 255, 0.4)',
-                          backdropFilter: 'blur(10px)',
+                          background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.7), rgba(255, 79, 217, 0.7))',
+                          boxShadow: '0 0 30px rgba(255, 215, 0, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.2)',
+                          border: '1.5px solid rgba(255, 255, 255, 0.3)',
+                          backdropFilter: 'blur(8px)',
                         }}
                         initial={{
                           x: Math.cos(angle) * radius,
                           y: Math.sin(angle) * radius,
                           rotate: angle * (180 / Math.PI) + Math.random() * 180,
                           opacity: 0,
-                          scale: 0.5,
+                          scale: 0.4,
                         }}
                         animate={{
-                          x: (i % 4 - 1.5) * 40,
-                          y: (Math.floor(i / 4) - 1.5) * 40,
+                          x: (i % 3 - 1) * 35,
+                          y: (Math.floor(i / 3) - 1.5) * 35,
                           rotate: 0,
                           opacity: progress,
-                          scale: progress * 1,
+                          scale: progress * 0.95,
                         }}
                         transition={{
-                          duration: 1.5,
+                          duration: 1.2,
                           ease: [0.34, 1.56, 0.64, 1],
-                          delay: i * 0.05,
+                          delay: i * 0.06,
                         }}
                       />
                     );
                   })}
 
-                  {/* Center scooty icon reveal with volumetric glow */}
+                  {/* Center scooty icon reveal with optimized glow */}
                   <motion.div
                     className="relative z-10"
                     initial={{ scale: 0, rotate: -180 }}
@@ -378,14 +369,14 @@ export default function RevealShell({ seed, className = '' }) {
                     transition={{ type: 'spring', damping: 12, stiffness: 150 }}
                   >
                    <motion.div
-  className="flex items-center justify-center"
-  animate={{ scale: [1, 1.1, 1] }}
-  transition={{ duration: 2, repeat: Infinity }}
-  style={{ filter: 'drop-shadow(0 0 30px rgba(0,255,255,0.6))' }}
+  className="flex items-center justify-center will-change-transform"
+  animate={{ scale: [1, 1.08, 1] }}
+  transition={{ duration: 2.5, repeat: repeatCount }}
+  style={{ filter: 'drop-shadow(0 0 25px rgba(0,255,255,0.5))' }}
 >
   <img
     src="/scootyicon.png"
-    srcSet="/scootyicon.png 1x, /scooty@2x.png 2x"
+    srcSet="/scootyicon.png 1x, /scootyicon.png 2x"
     alt="Scooty"
     className="w-[200px] h-[200px] md:w-[320px] md:h-[320px] object-contain"
     style={{ imageRendering: 'auto' }}
@@ -393,36 +384,36 @@ export default function RevealShell({ seed, className = '' }) {
 </motion.div>
 
                     
-                    {/* Volumetric glow pulse */}
+                    {/* Volumetric glow pulse - OPTIMIZED */}
                     <motion.div
-                      className="absolute inset-0 rounded-full"
+                      className="absolute inset-0 rounded-full will-change-transform"
                       style={{
-                        background: 'radial-gradient(circle, rgba(255, 215, 0, 0.8), transparent 70%)',
-                        filter: 'blur(60px)',
+                        background: 'radial-gradient(circle, rgba(255, 215, 0, 0.6), transparent 70%)',
+                        filter: 'blur(50px)',
                       }}
                       animate={{
-                        scale: [1, 1.8, 1],
-                        opacity: [0.8, 0.4, 0.8],
+                        scale: [1, 1.5, 1],
+                        opacity: [0.6, 0.25, 0.6],
                       }}
                       transition={{
-                        duration: 2,
-                        repeat: Infinity,
+                        duration: 2.5,
+                        repeat: repeatCount,
                       }}
                     />
                   </motion.div>
 
-                  {/* Swirling particles */}
-                  {Array.from({ length: 30 }).map((_, i) => {
-                    const angle = (i / 30) * Math.PI * 2;
-                    const radius = 150 + Math.sin(i * 0.5) * 50;
+                  {/* Swirling particles - REDUCED from 30 to 16 */}
+                  {Array.from({ length: 16 }).map((_, i) => {
+                    const angle = (i / 16) * Math.PI * 2;
+                    const radius = 130 + Math.sin(i * 0.5) * 40;
                     
                     return (
                       <motion.div
                         key={`particle-${i}`}
-                        className="absolute w-3 h-3 rounded-full"
+                        className="absolute w-2 h-2 rounded-full will-change-transform"
                         style={{
                           background: 'radial-gradient(circle, #FFD700, #FF4FD9)',
-                          boxShadow: '0 0 15px #FFD700',
+                          boxShadow: '0 0 10px #FFD700',
                         }}
                         animate={{
                           x: [
@@ -433,13 +424,13 @@ export default function RevealShell({ seed, className = '' }) {
                             Math.sin(angle) * radius,
                             Math.sin(angle + Math.PI * 2) * radius,
                           ],
-                          opacity: [0.4, 1, 0.4],
+                          opacity: [0.3, 0.8, 0.3],
                         }}
                         transition={{
-                          duration: 6,
-                          repeat: Infinity,
+                          duration: 7,
+                          repeat: repeatCount,
                           ease: 'linear',
-                          delay: i * 0.1,
+                          delay: i * 0.12,
                         }}
                       />
                     );
@@ -447,31 +438,31 @@ export default function RevealShell({ seed, className = '' }) {
                 </div>
               )}
 
-              {/* Winner 2: Energy Rings Collapsing + Holographic Cube Breaking */}
+              {/* Winner 2: Energy Rings Collapsing + Holographic Cube Breaking - OPTIMIZED */}
               {currentWinnerIndex === 1 && (
                 <div className="relative w-full aspect-square max-w-2xl mx-auto flex items-center justify-center">
-                  {/* Energy rings collapsing inward */}
-                  {Array.from({ length: 6 }).map((_, i) => {
-                    const maxRadius = 300 - i * 40;
-                    const collapseProgress = Math.max(0, Math.min(1, (assemblyProgress - i * 0.1) * 2));
+                  {/* Energy rings collapsing inward - REDUCED from 6 to 4 */}
+                  {Array.from({ length: 4 }).map((_, i) => {
+                    const maxRadius = 280 - i * 50;
+                    const collapseProgress = Math.max(0, Math.min(1, (assemblyProgress - i * 0.12) * 2));
                     const currentRadius = maxRadius * (1 - collapseProgress);
                     
                     return (
                       <motion.div
                         key={`ring-${i}`}
-                        className="absolute rounded-full"
+                        className="absolute rounded-full will-change-transform"
                         style={{
                           width: currentRadius * 2,
                           height: currentRadius * 2,
-                          border: `4px solid rgba(255, 79, 217, ${0.3 + i * 0.1})`,
-                          boxShadow: `0 0 ${40 + i * 10}px rgba(255, 79, 217, 0.6), inset 0 0 ${30 + i * 5}px rgba(109, 43, 255, 0.4)`,
+                          border: `3px solid rgba(255, 79, 217, ${0.25 + i * 0.12})`,
+                          boxShadow: `0 0 ${35 + i * 8}px rgba(255, 79, 217, 0.5), inset 0 0 ${25 + i * 4}px rgba(109, 43, 255, 0.3)`,
                         }}
                         animate={{
                           rotate: (i % 2 === 0 ? 360 : -360),
                           opacity: collapseProgress,
                         }}
                         transition={{
-                          rotate: { duration: 4 - i * 0.3, repeat: Infinity, ease: 'linear' },
+                          rotate: { duration: 5 - i * 0.4, repeat: repeatCount, ease: 'linear' },
                         }}
                       />
                     );
@@ -527,13 +518,13 @@ export default function RevealShell({ seed, className = '' }) {
                     <motion.div
   className="flex items-center justify-center"
   animate={{ scale: [1, 1.1, 1] }}
-  transition={{ duration: 2, repeat: Infinity }}
+  transition={{ duration: 2, repeat: repeatCount }}
   style={{ filter: 'drop-shadow(0 0 30px rgba(0,255,255,0.6))' }}
 >
   <img
     src="/bikeicon.png"
-    srcSet="/bikeicon.png 1x, /scooty@2x.png 2x"
-    alt="Scooty"
+    srcSet="/bikeicon.png 1x, /bikeicon.png 2x"
+    alt="bike"
     className="w-[200px] h-[200px] md:w-[320px] md:h-[320px] object-contain"
     style={{ imageRendering: 'auto' }}
   />
@@ -552,8 +543,8 @@ export default function RevealShell({ seed, className = '' }) {
                         rotate: 360,
                       }}
                       transition={{
-                        scale: { duration: 2, repeat: Infinity },
-                        rotate: { duration: 4, repeat: Infinity, ease: 'linear' },
+                        scale: { duration: 2, repeat: repeatCount },
+                        rotate: { duration: 4, repeat: repeatCount, ease: 'linear' },
                       }}
                     />
 
@@ -572,7 +563,7 @@ export default function RevealShell({ seed, className = '' }) {
                         }}
                         transition={{
                           duration: 2,
-                          repeat: Infinity,
+                          repeat: repeatCount,
                           delay: i * 0.4,
                         }}
                       />
@@ -596,7 +587,7 @@ export default function RevealShell({ seed, className = '' }) {
                       }}
                       transition={{
                         duration: 1.5,
-                        repeat: Infinity,
+                        repeat: repeatCount,
                         delay: Math.random() * 2,
                       }}
                     />
