@@ -7,29 +7,7 @@ import { X, Trophy, Award, Sparkles, Home, RefreshCw, Crown, Zap, ChevronRight }
 import Link from 'next/link';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
-/**
- * 🎮 ULTRA-PREMIUM FUTURISTIC WINNER MODAL - REDESIGNED
- * Cyberpunk 2077 + Apple Glass + AAA Victory Screen
- * 
- * Features:
- * - Next-gen multi-layer glassmorphism with extreme depth
- * - Neon cyan/purple/pink energy glow system
- * - Holographic overlays with iridescent shimmer
- * - Digital particles floating in 3D space
- * - Sci-fi grid with perspective depth
- * - Nebula background with volumetric fog
- * - Hologram trophy with spark particles
- * - Celebration confetti burst
- * - Rotating neon ring avatar with reflection
- * - Glowing crown with pulse animation
- * - Radial light streaks
- * - 3D prize on floating holographic pedestal
- * - Rotating neon halo discs
- * - Spotlight beam effects
- * - LEGENDARY PRIZE badge in gold neon
- * - Animated gradient buttons with scanning borders
- * - Cosmic gradient background with parallax
- */
+
 export default function WinnerModal({ winner, prize, isOpen, onClose, showNextButton = false, onNextWinner }) {
   const modalRef = useFocusTrap(isOpen);
   const [particles, setParticles] = useState([]);
@@ -38,7 +16,7 @@ export default function WinnerModal({ winner, prize, isOpen, onClose, showNextBu
   // Memoized particle arrays (generated when modal opens)
   const confettiParticles = useMemo(() => {
     if (!isOpen) return [];
-    const count = prefersReducedMotion ? 12 : 24;
+    const count = prefersReducedMotion ? 24 : 50;
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       x: 50 + (Math.random() - 0.5) * 30,

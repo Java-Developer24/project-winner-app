@@ -256,7 +256,7 @@ export default function RevealShell({ seed, className = '' }) {
       {stage === 'loading' && typeof document !== 'undefined' && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none" style={{ contain: 'layout', isolation: 'isolate' }}>
           <div className="pointer-events-auto">
-            <LoaderLottie className="w-64 h-64 md:w-80 md:h-80" />
+            <LoaderLottie className="w-40 h-50 md:w-80 md:h-50" />
           </div>
         </div>,
         document.body
