@@ -111,7 +111,7 @@ export default function RevealShell({ seed, className = "" }) {
     }, 500);
   }, [play, isVisible]);
 
-  // Handle "Reveal Next Winner" button click
+  // Handle "Reveal Next Winner" button
   const handleRevealNextWinner = useCallback(() => {
     setShowModal(false);
     setShowConfetti(false);
