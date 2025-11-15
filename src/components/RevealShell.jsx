@@ -831,7 +831,7 @@ export default function RevealShell({ seed, className = "" }) {
           <motion.img
             src="/left-decors.png"
             alt="left character"
-            className="hidden md:block pointer-events-none fixed left-4 md:left-1 lg:left-1 top-95 z-[75] w-40 md:w-56 lg:w-72"
+            className="hidden md:block pointer-events-none fixed left-4 md:left-1 lg:left-1 top-40 z-[75] w-40 md:w-56 lg:w-72"
             initial={{ opacity: 1 }} // start visible
             // animate={{
             //   y: [40, 0, 40],                 // vertical float only
@@ -853,7 +853,7 @@ export default function RevealShell({ seed, className = "" }) {
           <motion.img
             src="/right-decor.png"
             alt="right character"
-            className="hidden md:block pointer-events-none fixed right-4 md:right-2 lg:right-2 top-95 z-[75] w-40 md:w-56 lg:w-72"
+            className="hidden md:block pointer-events-none fixed right-4 md:right-2 lg:right-2 top-43 z-[75] w-40 md:w-56 lg:w-72"
             initial={{ opacity: 1 }}
             // animate={{
             //   // either same phase:
