@@ -14,7 +14,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
     // Simplified: No particle array to reduce memory and lag
     setParticles([]);
 
-    // Stage progression timeline - SIMPLIFIED TO 8 SECONDS
+    // Stage progression timeline - EXTENDED REVEAL TO HOLD ANIMATIONS
     const timers = [
       setTimeout(() => setStage('formation'), 2000),  // 0.0s - 2.0s (skeleton)
       setTimeout(() => setStage('assembly'), 4500),   // 2.0s - 4.5s (formation)
@@ -22,7 +22,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
       setTimeout(() => {
         setStage('complete');
         if (onComplete) onComplete();
-      }, 8000),  // 6.5s - 8.0s (reveal) - TOTAL 8 SECONDS
+      }, 11000),  // 6.5s - 11.0s (reveal) - EXTENDED TO 4.5 SECONDS TO WATCH ANIMATIONS
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -167,7 +167,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
               {/* Premium glass card with loading animation and GoDaddy branding */}
               <div className="relative">
                 <motion.div
-                  className="w-[420px] h-[220px] rounded-[32px] flex flex-col items-center justify-center"
+                  className="w-[420px] rounded-[32px] flex flex-col items-center justify-center px-4 py-6"
                   style={{
                     background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02))',
                     backdropFilter: 'blur(30px) saturate(150%)',
@@ -180,7 +180,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
                 >
                   {/* Loading spinner with aqua glow */}
                   <motion.div
-                    className="relative w-20 h-20 mb-6"
+                    className="relative w-20 h-20 mb-2"
                     animate={{ rotate: 360 }}
                     transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                   >
@@ -207,6 +207,23 @@ export const GoDaddyLoader = ({ onComplete }) => {
                   >
                     GoDaddy
                   </motion.p>
+                  
+                  {/* Small white GoDaddy logo below text */}
+                  <motion.div
+                    className="mt-3 flex justify-center"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                  >
+                    <img
+                      src="https://www.godaddy.com/resources/wp-content/uploads/new-godaddy-logo-e1579020024559.png?width=8000&height=8000&resize=contain"
+                      alt="GoDaddy logo"
+                      className="w-24 h-auto opacity-80"
+                      style={{
+                        filter: 'brightness(1.1) drop-shadow(0 0 6px rgba(0, 224, 202, 0.4))',
+                      }}
+                    />
+                  </motion.div>
                 </motion.div>
                 
                 {/* Premium progress bar below card */}
@@ -362,7 +379,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
               className="absolute inset-0 flex items-center justify-center"
               initial={{ scale: 0.92 }}
               animate={{ scale: 1 }}
-              transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
             >
               {/* Enhanced center glow */}
               <motion.div
@@ -378,7 +395,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
                   opacity: [0, 1, 0.9],
                 }}
                 transition={{
-                  duration: 1.5,
+                  duration: 1.0,
                   ease: [0.45, 0.05, 0.55, 0.95],
                 }}
               />
@@ -398,9 +415,9 @@ export const GoDaddyLoader = ({ onComplete }) => {
                   opacity: [0.6, 1, 0.9],
                 }}
                 transition={{
-                  scale: { duration: 2.0, ease: 'easeInOut' },
+                  scale: { duration: 1.5, ease: 'easeInOut' },
                   rotate: { duration: 15, repeat: Infinity, ease: 'linear' },
-                  opacity: { duration: 1.5, ease: 'easeOut' },
+                  opacity: { duration: 1.0, ease: 'easeOut' },
                 }}
               />
 
@@ -415,7 +432,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
                 initial={{ x: '-250%' }}
                 animate={{ x: '250%', opacity: [0, 1, 0.8, 0] }}
                 transition={{
-                  duration: 1.5,
+                  duration: 1.0,
                   ease: [0.45, 0.05, 0.55, 0.95],
                 }}
               />
@@ -425,7 +442,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
                 className="relative z-10"
                 initial={{ opacity: 0, y: 25, scale: 0.85 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
+                transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <motion.img
                   src="https://www.godaddy.com/resources/wp-content/uploads/new-godaddy-logo-e1579020024559.png?width=8000&height=8000&resize=contain"
@@ -450,25 +467,25 @@ export const GoDaddyLoader = ({ onComplete }) => {
                   }}
                 />
                 
-                {/* Premium text */}
+                {/* Premium text - ULTRA OPTIMIZED for performance */}
                 <motion.div
                   className="text-center mt-8"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.6, duration: 0.5 }}
+                  transition={{ delay: 0.2, duration: 0.3 }}
+                  style={{ willChange: 'opacity' }}
                 >
-                  <p 
-                    className="text-3xl font-bold text-white tracking-wide"
-                    style={{
-                      textShadow: '0 0 30px rgba(0, 224, 202, 0.6), 0 0 15px rgba(0, 224, 202, 0.4), 0 2px 8px rgba(0, 0, 0, 0.5)',
-                      fontSmooth: 'always',
-                      WebkitFontSmoothing: 'antialiased',
-                      MozOsxFontSmoothing: 'grayscale',
-                      letterSpacing: '0.05em',
+                  <div
+                    className="relative block text-5xl font-black px-6"
+                    style={{ 
+                      fontFamily: 'Orbitron, sans-serif',
+                      letterSpacing: '0.15em',
+                      color: '#ffffff',
+                      textShadow: '0 0 30px #10b981, 0 0 60px #059669',
                     }}
                   >
                     GoDaddy
-                  </p>
+                  </div>
                 </motion.div>
               </motion.div>
             </motion.div>
