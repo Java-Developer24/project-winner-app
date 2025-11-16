@@ -307,6 +307,49 @@ export default function WinnerModal({
             />
           ))}
 
+          {/* PREMIUM CONFETTI BURST FROM LEFT & RIGHT - Beautiful falling animation */}
+          {isOpen && Array.from({ length: prefersReducedMotion ? 0 : 40 }).map((_, i) => {
+            const isFromLeft = i % 2 === 0;
+            const startX = isFromLeft ? -100 : 100;
+            const colors = ["#00ffff", "#ff00ff", "#ffd700", "#ff1493", "#00ff88", "#ff6b35", "#00d4ff", "#ff4fd9"];
+            const size = Math.random() * 8 + 3;
+            const duration = 2.5 + Math.random() * 1.5;
+            const delay = (i % 5) * 0.1;
+            
+            return (
+              <motion.div
+                key={`premium-confetti-${i}`}
+                className="fixed pointer-events-none z-[58] will-change-transform"
+                style={{
+                  width: `${size}px`,
+                  height: `${size}px`,
+                  backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+                  borderRadius: "50%",
+                  boxShadow: `0 0 ${size * 3}px ${colors[Math.floor(Math.random() * colors.length)]}`,
+                }}
+                initial={{
+                  x: `${startX}vw`,
+                  y: "50vh",
+                  opacity: 0,
+                  scale: 0,
+                  rotate: 0,
+                }}
+                animate={{
+                  x: `${50 + (Math.random() - 0.5) * 60}vw`,
+                  y: `${50 + (Math.random() - 0.5) * 400}vh`,
+                  opacity: [0, 1, 0.8, 0],
+                  scale: [0, 1.4, 0.9, 0.2],
+                  rotate: [0, Math.random() * 720, Math.random() * 360],
+                }}
+                transition={{
+                  duration,
+                  delay,
+                  ease: "easeOut",
+                }}
+              />
+            );
+          })}
+
           {/* Spark particles drifting downward - OPTIMIZED (16 instead of 40) */}
           {sparkParticles.map((spark) => (
             <motion.div

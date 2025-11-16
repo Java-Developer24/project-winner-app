@@ -248,9 +248,81 @@ export const GoDaddyLoader = ({ onComplete }) => {
             </motion.div>
           )}
 
-          {/* Stage 2: Formation (2.0s - 4.5s) - Simpler, no particles to reduce lag */}
-          {/* Stage 2: Formation (2.0s - 4.5s) - No card, just background */}
-          {stage === 'formation' && null}
+          {/* Stage 2: Formation (2.0s - 4.5s) - Keep loader card visible */}
+          {stage === 'formation' && (
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="relative">
+                <motion.div
+                  className="w-[420px] h-[220px] rounded-[32px] flex flex-col items-center justify-center"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02))',
+                    backdropFilter: 'blur(30px) saturate(150%)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                  animate={{ scale: [1, 1.02, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <div className="relative w-20 h-20 mb-6 animate-spin">
+                    <div
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        border: '3px solid transparent',
+                        borderTopColor: 'rgba(0, 224, 202, 0.8)',
+                        borderRightColor: 'rgba(0, 224, 202, 0.4)',
+                        boxShadow: '0 0 30px rgba(0, 224, 202, 0.6), inset 0 0 15px rgba(0, 224, 202, 0.2)',
+                      }}
+                    />
+                  </div>
+                  <p className="text-2xl font-bold text-white tracking-wide" style={{ textShadow: '0 0 20px rgba(0, 224, 202, 0.5), 0 0 10px rgba(0, 224, 202, 0.3)' }}>GoDaddy</p>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Stage 2: Formation (2.0s - 4.5s) - Keep loader card visible */}
+          {stage === 'formation' && (
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="relative">
+                <motion.div
+                  className="w-[420px] h-[220px] rounded-[32px] flex flex-col items-center justify-center"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02))',
+                    backdropFilter: 'blur(30px) saturate(150%)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                  animate={{ scale: [1, 1.02, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <div className="relative w-20 h-20 mb-6 animate-spin">
+                    <div
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        border: '3px solid transparent',
+                        borderTopColor: 'rgba(0, 224, 202, 0.8)',
+                        borderRightColor: 'rgba(0, 224, 202, 0.4)',
+                        boxShadow: '0 0 30px rgba(0, 224, 202, 0.6), inset 0 0 15px rgba(0, 224, 202, 0.2)',
+                      }}
+                    />
+                  </div>
+                  <p className="text-2xl font-bold text-white tracking-wide" style={{ textShadow: '0 0 20px rgba(0, 224, 202, 0.5), 0 0 10px rgba(0, 224, 202, 0.3)' }}>GoDaddy</p>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
 
           {/* Stage 3: Assembly (4.5s - 6.5s) - Simpler without 60 snapping particles */}
           {stage === 'assembly' && (

@@ -381,7 +381,7 @@ export default function HomeHero() {
             }}
           >
             <Link href="/reveal">
-              <PremiumButton variant="primary" className="group">
+              <PremiumButton variant="primary" className="group px-8 py-4">
                 <motion.div
                   animate={{ 
                     rotate: [0, 360],
@@ -392,9 +392,9 @@ export default function HomeHero() {
                     scale: { duration: 2, repeat: repeatCount, ease: 'easeInOut' },
                   }}
                 >
-                  <Trophy className="w-7 h-7" />
+                  <Trophy className="w-8 h-8" />
                 </motion.div>
-                <span className="text-xl font-bold">Reveal Winner</span>
+                <span className="text-2xl font-bold">Reveal Winner</span>
                 <motion.span
                   animate={{ x: [0, 8, 0] }}
                   transition={{ duration: 1.5, repeat: repeatCount }}

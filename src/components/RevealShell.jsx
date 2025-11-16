@@ -479,10 +479,10 @@ export default function RevealShell({ seed, className = "" }) {
 
               {/* Winner 2: Energy Rings Collapsing + Holographic Cube Breaking - OPTIMIZED */}
               {currentWinnerIndex === 1 && (
-                <div className="relative w-full aspect-square max-w-md mx-auto flex items-center justify-center" style={{minHeight:'320px',height:'320px',maxHeight:'320px'}}>
+                <div className="relative w-full aspect-square max-w-2xl mx-auto flex items-center justify-center" style={{minHeight:'420px',height:'420px',maxHeight:'420px'}}>
                   {/* Energy rings collapsing inward - REDUCED from 6 to 4 */}
                   {Array.from({ length: 4 }).map((_, i) => {
-                    const maxRadius = 140 - i * 25;
+                    const maxRadius = 180 - i * 30;
                     const collapseProgress = Math.max(
                       0,
                       Math.min(1, (assemblyProgress - i * 0.12) * 2)
@@ -525,7 +525,7 @@ export default function RevealShell({ seed, className = "" }) {
                     return (
                       <motion.div
                         key={`cube-${i}`}
-                        className="absolute w-8 h-8 rounded-lg"
+                        className="absolute w-12 h-12 rounded-lg"
                         style={{
                           background:
                             "linear-gradient(135deg, rgba(255, 79, 217, 0.7), rgba(109, 43, 255, 0.7))",
@@ -584,7 +584,7 @@ export default function RevealShell({ seed, className = "" }) {
                         src="/bikeicon.png"
                         srcSet="/bikeicon.png 1x, /bikeicon.png 2x"
                         alt="bike"
-                        className="w-[90px] h-[90px] md:w-[120px] md:h-[120px] object-contain"
+                        className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] object-contain"
                         style={{ imageRendering: "auto" }}
                       />
                     </motion.div>
@@ -663,7 +663,7 @@ export default function RevealShell({ seed, className = "" }) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="mt-0 space-y-2 mb-2"
+        className="mt-12 space-y-2 mb-2"
         style={{ position: 'relative', zIndex: 20 }}
       >
         <div className="inline-block glass-morph-premium backdrop-blur-md rounded-lg px-3 py-1 border border-white/15">
