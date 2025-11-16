@@ -308,7 +308,7 @@ export default function WinnerModal({
           ))}
 
           {/* PREMIUM CONFETTI BURST FROM LEFT & RIGHT - Beautiful falling animation */}
-          {isOpen && Array.from({ length: prefersReducedMotion ? 0 : 40 }).map((_, i) => {
+          {isOpen && !prefersReducedMotion && Array.from({ length: 50 }).map((_, i) => {
             const isFromLeft = i % 2 === 0;
             const startX = isFromLeft ? -100 : 100;
             const colors = ["#00ffff", "#ff00ff", "#ffd700", "#ff1493", "#00ff88", "#ff6b35", "#00d4ff", "#ff4fd9"];

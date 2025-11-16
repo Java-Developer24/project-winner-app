@@ -112,8 +112,8 @@ export default function RevealShell({ seed, className = "" }) {
 
         setTimeout(() => {
           setShowModal(true);
-        }, 500);
-      }, 3000);
+        }, 300);
+      }, 2500);
     }, 500);
   }, [play, isVisible]);
 
@@ -244,7 +244,7 @@ export default function RevealShell({ seed, className = "" }) {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="absolute top-8 left-1/2 -translate-x-1/2 z-20"
+        className="absolute top-4 left-1/2 -translate-x-1/2 z-20"
       >
         <div className="glass-morph-premium backdrop-blur-xl rounded-full px-6 py-3 border border-white/20">
           <p className="text-white font-semibold text-sm flex items-center gap-2">
@@ -479,10 +479,10 @@ export default function RevealShell({ seed, className = "" }) {
 
               {/* Winner 2: Energy Rings Collapsing + Holographic Cube Breaking - OPTIMIZED */}
               {currentWinnerIndex === 1 && (
-                <div className="relative w-full aspect-square max-w-2xl mx-auto flex items-center justify-center" style={{minHeight:'420px',height:'420px',maxHeight:'420px'}}>
+                <div className="relative w-full aspect-square max-w-4xl mx-auto flex items-center justify-center" style={{minHeight:'480px',height:'480px',maxHeight:'480px'}}>
                   {/* Energy rings collapsing inward - REDUCED from 6 to 4 */}
                   {Array.from({ length: 4 }).map((_, i) => {
-                    const maxRadius = 180 - i * 30;
+                    const maxRadius = 220 - i * 35;
                     const collapseProgress = Math.max(
                       0,
                       Math.min(1, (assemblyProgress - i * 0.12) * 2)
@@ -584,7 +584,7 @@ export default function RevealShell({ seed, className = "" }) {
                         src="/bikeicon.png"
                         srcSet="/bikeicon.png 1x, /bikeicon.png 2x"
                         alt="bike"
-                        className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] object-contain"
+                        className="w-[160px] h-[160px] md:w-[200px] md:h-[200px] object-contain"
                         style={{ imageRendering: "auto" }}
                       />
                     </motion.div>
