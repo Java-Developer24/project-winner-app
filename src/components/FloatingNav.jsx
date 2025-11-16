@@ -22,7 +22,7 @@ export default function FloatingNav() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, delay: 0.2 }}
-      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-2xl glass-morph-premium"
+      className="fixed top-0.5 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-2xl glass-morph-premium"
       style={{
         boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.3)',
         willChange: prefersReducedMotion ? 'auto' : 'transform',

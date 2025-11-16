@@ -244,7 +244,7 @@ export default function RevealShell({ seed, className = "" }) {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="absolute top-4 left-1/2 -translate-x-1/2 z-20"
+        className="absolute top-15px left-1/2 -translate-x-1/2 z-20"
       >
         <div className="glass-morph-premium backdrop-blur-xl rounded-full px-6 py-3 border border-white/20">
           <p className="text-white font-semibold text-sm flex items-center gap-2">
@@ -663,19 +663,19 @@ export default function RevealShell({ seed, className = "" }) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="mt-12 space-y-2 mb-2"
+        className="mt-8 space-y-2 mb-2"
         style={{ position: 'relative', zIndex: 20 }}
       >
-        <div className="inline-block glass-morph-premium backdrop-blur-md rounded-lg px-3 py-1 border border-white/15">
+        <div className="inline-block glass-morph-premium backdrop-blur-md rounded-lg px-5 py-1 border border-white/15">
           <div className="flex items-center gap-1.5">
             <Zap className="w-3 h-3 text-yellow-400" />
-            <span className="text-white font-semibold text-xs">
+            <span className="text-white font-semibold text-sm">
               {Math.floor(assemblyProgress * 100)}%
             </span>
-            <span className="text-white/70 text-xs">Assembled</span>
+            <span className="text-white/70 text-sm">Assembled</span>
           </div>
         </div>
-        <div className="relative w-24 h-1 bg-white/10 rounded-full overflow-hidden mx-auto backdrop-blur-sm border border-white/15">
+        <div className="relative w-40 h-3 bg-white/10 rounded-full overflow-hidden mx-auto backdrop-blur-sm border border-white/15">
           <motion.div
             className="h-full rounded-full"
             style={{

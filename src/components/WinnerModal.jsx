@@ -485,7 +485,7 @@ export default function WinnerModal({
                 stiffness: 200,
                 delay: 0.15,
               }}
-              className="w-full max-w-xs pointer-events-auto"
+              className="w-full max-w-lg md:max-w-2xl  pointer-events-auto"
             >
               {/* MAIN CARD - Multi-layer glass with extreme depth */}
               <div className="relative rounded-[2.5rem] overflow-visible">
@@ -571,14 +571,14 @@ export default function WinnerModal({
                 <div className="absolute top-1/3 right-0 w-64 h-64 bg-purple-500/40 rounded-full blur-[120px] translate-x-1/2" />
                 <div className="absolute bottom-1/3 left-0 w-64 h-64 bg-cyan-400/40 rounded-full blur-[120px] -translate-x-1/2" />
                 {/* Close button */}
-                <button
+                {/* <button
                   onClick={onClose}
                   className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 p-2 rounded-full bg-white/5 hover:bg-white/15 transition-all backdrop-blur-sm group border-2 border-cyan-400/40 hover:border-cyan-400"
                   aria-label="Close modal"
                   style={{ boxShadow: "0 0 25px rgba(0, 255, 255, 0.4)" }}
                 >
                   <X className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-cyan-300 group-hover:rotate-90 group-hover:scale-125 transition-transform duration-300" />
-                </button>{" "}
+                </button>{" "} */}
                 {/* CONTENT */}
                 <div className="relative p-2 sm:p-3 md:p-4">
                   {/* ═══════════════════════════════════════════════════════════
@@ -802,7 +802,7 @@ export default function WinnerModal({
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ delay: 1, type: "spring", damping: 18 }}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full mb-4 relative overflow-hidden text-xs sm:text-sm"
+                        className="inline-flex items-center gap-1.5 px-2 py-1.5 rounded-full mb-4 relative overflow-hidden text-xs sm:text-sm"
                         style={{
                           background:
                             "linear-gradient(135deg, #FFD700 0%, #8B00FF 50%, #FF00FF 100%)",

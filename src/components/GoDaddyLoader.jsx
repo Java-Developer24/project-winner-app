@@ -255,7 +255,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.5 }}
             >
               <div className="relative">
                 <motion.div
@@ -287,7 +287,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
           )}
 
           {/* Stage 2: Formation (2.0s - 4.5s) - Keep loader card visible */}
-          {stage === 'formation' && (
+          {/* {stage === 'formation' && (
             <motion.div
               className="absolute inset-0 flex items-center justify-center"
               initial={{ opacity: 0 }}
@@ -322,10 +322,10 @@ export const GoDaddyLoader = ({ onComplete }) => {
                 </motion.div>
               </div>
             </motion.div>
-          )}
+          )} */}
 
           {/* Stage 3: Assembly (4.5s - 6.5s) - Simpler without 60 snapping particles */}
-          {stage === 'assembly' && (
+          {/* {stage === 'assembly' && (
             <div className="absolute inset-0 flex items-center justify-center">
               <motion.div
                 className="relative"
@@ -336,7 +336,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
                   ease: [0.34, 1.56, 0.64, 1],
                 }}
               >
-                {/* Simpler outline without snapping particles */}
+                Simpler outline without snapping particles
                 <motion.div
                   className="relative w-[340px] h-[170px] flex items-center justify-center rounded-[64px] overflow-hidden"
                   style={{
@@ -354,7 +354,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
                 />
               </motion.div>
             </div>
-          )}
+          )} */}
 
           {/* Stage 4: Reveal (6.5s - 8.0s) - Final logo without 40 confetti particles */}
           {stage === 'reveal' && (
@@ -428,7 +428,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
                 transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <motion.img
-                  src="./logogd.png?width=8000&height=8000&resize=contain"
+                  src="https://www.godaddy.com/resources/wp-content/uploads/new-godaddy-logo-e1579020024559.png?width=8000&height=8000&resize=contain"
                   alt="GoDaddy logo"
                   className="w-96 h-auto"
                   style={{

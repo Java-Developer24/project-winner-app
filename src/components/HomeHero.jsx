@@ -93,7 +93,7 @@ export default function HomeHero() {
         initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
-        className="hidden lg:block absolute left-8 xl:left-16 top-1/2 -translate-y-1/2 z-[5] pointer-events-none"
+        className="hidden lg:block absolute left-8 xl:left-16 top-75 -translate-y-1/2 z-[5] pointer-events-none"
       >
         {/* Soft radial glow - cyan accent matching Jupiter */}
         {!prefersReducedMotion && (
@@ -147,7 +147,7 @@ export default function HomeHero() {
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
-        className="hidden lg:block absolute right-8 xl:right-16 top-1/2 -translate-y-1/2 z-[5] pointer-events-none"
+        className="hidden lg:block absolute right-8 xl:right-16 top-75 -translate-y-1/2 z-[5] pointer-events-none"
       >
         {/* Soft radial glow - magenta accent matching R15 */}
         {!prefersReducedMotion && (
@@ -219,7 +219,7 @@ export default function HomeHero() {
       </motion.div>
 
       {/* Main content */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 text-center pt-32 pb-20">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 text-center pt-25 pb-6">
         {/* Premium badge with enhanced glass morph */}
         {/* <motion.div
           initial={{ scale: 0, rotate: -180 }}
