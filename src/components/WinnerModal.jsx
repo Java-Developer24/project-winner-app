@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import CelebrationConfetti from "./CelebrationConfetti";
 import {
   motion,
   AnimatePresence,
@@ -851,48 +852,7 @@ export default function WinnerModal({
                             ease: "easeInOut",
                           }}
                         >
-                          {/* Floating holographic pedestal */}
-                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-32 h-4 rounded-full bg-gradient-to-r from-cyan-500/50 via-purple-400/60 to-pink-500/50 blur-lg" />
-                          <motion.div
-                            className="absolute bottom-4 left-1/2 -translate-x-1/2 w-28 h-3 rounded-full"
-                            style={{
-                              background:
-                                "linear-gradient(90deg, #00ffff, #ff00ff, #00ffff)",
-                              backgroundSize: "200% 100%",
-                              boxShadow:
-                                "0 0 35px rgba(0, 255, 255, 0.9), 0 0 60px rgba(255, 0, 255, 0.7)",
-                            }}
-                            animate={{
-                              backgroundPosition: [
-                                "0% 50%",
-                                "100% 50%",
-                                "0% 50%",
-                              ],
-                            }}
-                            transition={{
-                              duration: 3.5,
-                              repeat: repeatCount,
-                              ease: "linear",
-                            }}
-                          />
-
-                          {/* Spotlight beam beneath prize */}
-                          <motion.div
-                            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-64 opacity-40 pointer-events-none"
-                            style={{
-                              background:
-                                "linear-gradient(180deg, rgba(0, 255, 255, 0) 0%, rgba(0, 255, 255, 0.6) 100%)",
-                              clipPath:
-                                "polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%)",
-                            }}
-                            animate={{
-                              opacity: [0.3, 0.6, 0.3],
-                            }}
-                            transition={{
-                              duration: 3,
-                              repeat: repeatCount,
-                            }}
-                          />
+                          {/* Pedestal removed to simplify layout and avoid loader-like element */}
 
                           {/* Rotating neon halo discs - OPTIMIZED (2 layers instead of 3) */}
                           <motion.div
@@ -977,40 +937,61 @@ export default function WinnerModal({
                             }}
                           />
 
-                          {/* 3D Prize emoji on floating pedestal */}
+                          {/* Prize emoji with subtle forward motion on a 'road' */}
                           <motion.div
                             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex items-center justify-center will-change-transform"
-                            animate={{
-                              rotate: [0, 12, -12, 0],
-                              scale: [1, 1.06, 1],
-                            }}
-                            transition={{
-                              duration: 6,
-                              repeat: repeatCount,
-                            }}
-                            style={{
-                              filter:
-                                "drop-shadow(0 0 35px rgba(0, 255, 255, 0.7)) drop-shadow(0 0 70px rgba(255, 0, 255, 0.6))",
-                            }}
+                            style={{ filter: "drop-shadow(0 0 20px rgba(0,255,255,0.45))" }}
                           >
-                            {/\.(png|jpe?g|gif|svg|webp)$/i.test(
-                              prize.emoji
-                            ) ? (
-                              <img
-                                src={prize.emoji}
-                                alt={prize.name}
-                                className="w-100 h-100 md:w-100 md:h-100 object-contain"
-                                style={{
-                                  filter:
-                                    "drop-shadow(0 0 20px rgba(0,255,255,0.5))",
-                                  imageRendering: "auto",
-                                }}
+                              <div style={{ position: 'relative', width: 'min(20rem, 64vw)', height: 'min(20rem, 64vw)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <style>{`
+                                @keyframes road-scroll { from { background-position-x: 0; } to { background-position-x: -40px; } }
+                                /* vehicle-forward removed; emoji is fixed. Road stripes animate to create travel illusion */
+                                .emoji-road-bg { position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); width: 86%; height: 22%; border-radius: 999px; overflow: hidden; background: linear-gradient(180deg,#0b1020,#131821); box-shadow: 0 6px 20px rgba(0,0,0,0.45); }
+                                .emoji-road-bg::before { content: ''; position: absolute; inset:0; background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 6px, rgba(255,255,255,0.02) 6px 12px); opacity: 0.95; transform-origin: center; animation: road-scroll 0.45s linear infinite; will-change: background-position; }
+                                .emoji-vehicle { display:block; will-change: transform; transform: translateX(0); }
+                                /* traffic signal */
+                                .traffic-signal { position: absolute; bottom: 28%; left: calc(50% - 43% - 18px); width: 36px; height: 84px; border-radius: 8px; background: linear-gradient(#070707,#0b0b0b); box-shadow: 0 6px 18px rgba(0,0,0,0.5); display:flex; flex-direction:column; align-items:center; padding:8px 4px; gap:8px; z-index:11 }
+                                .traffic-signal .light { width: 18px; height: 18px; border-radius:50%; background: #222; box-shadow: inset 0 -2px 4px rgba(0,0,0,0.6); opacity:0.35 }
+                                @keyframes green-cycle { 0%,40% { box-shadow: 0 0 10px #4de68a; opacity:1; transform: scale(1.05); } 41%,100% { box-shadow:none; opacity:0.35; transform: scale(1); } }
+                                @keyframes yellow-cycle { 0%,39% { box-shadow:none; opacity:0.35; transform: scale(1); } 40%,60% { box-shadow: 0 0 10px #ffd166; opacity:1; transform: scale(1.05); } 61%,100% { box-shadow:none; opacity:0.35; transform: scale(1); } }
+                                @keyframes red-cycle { 0%,59% { box-shadow:none; opacity:0.35; transform: scale(1); } 60%,100% { box-shadow: 0 0 10px #ff4d4d; opacity:1; transform: scale(1.05); } }
+                                .signal-red { background: #ff4d4d; animation: red-cycle 5s linear infinite; }
+                                .signal-yellow { background: #ffd166; animation: yellow-cycle 5s linear infinite; }
+                                .signal-green { background: #4de68a; animation: green-cycle 5s linear infinite; }
+                                .traffic-pole { position: absolute; left: 22px; bottom: -36px; width: 6px; height: 36px; background: linear-gradient(#222,#111); border-radius:4px; }
+                              `}</style>
+
+                              {/* Road background (moving stripes emulate forward motion) */}
+                              <div className="emoji-road-bg" aria-hidden />
+
+                              {/* Traffic signal at left edge of the road (links visually to road) */}
+                              <div className="traffic-signal" aria-hidden>
+                                <div className="light signal-red" />
+                                <div className="light signal-yellow" />
+                                <div className="light signal-green active" />
+                                <div className="traffic-pole" />
+                              </div>
+
+                              {/* Emoji sits above road and is fixed (no bobbing) and slightly larger */}
+                              {/\.(png|jpe?g|gif|svg|webp)$/i.test(prize.emoji) ? (
+                                <img
+                                  src={prize.emoji}
+                                  alt={prize.name}
+                                  className="emoji-vehicle"
+                                  style={{ width: 'min(16rem, 54vw)', height: 'auto', zIndex: 12 }}
+                                />
+                              ) : (
+                                <span className="emoji-vehicle" style={{ fontSize: 'min(11rem, 44vw)', lineHeight: 1, zIndex:12 }}>
+                                  {prize.emoji}
+                                </span>
+                              )}
+
+                              {/* internal modal confetti emitter — more visible and positioned relative to modal */}
+                              <CelebrationConfetti
+                                active={isOpen}
+                                className="absolute top-2 left-2 w-32 h-28 z-[72] pointer-events-none"
                               />
-                            ) : (
-                              <span className="text-[8rem] md:text-[10rem] leading-none">
-                                {prize.emoji}
-                              </span>
-                            )}
+                            </div>
                           </motion.div>
                         </motion.div>
 

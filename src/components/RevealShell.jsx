@@ -16,6 +16,7 @@ import MuteToggle from "./MuteToggle";
 import LoaderLottie from "./LoaderLottie";
 import ParallaxBackground from "./ParallaxBackground";
 import Scene from "./3d/Scene";
+import CelebrationConfetti from "./CelebrationConfetti";
 import { Sparkles, Zap, ChevronRight } from "lucide-react";
 import prizesData from "@/data/prizes.json";
 
@@ -685,6 +686,8 @@ export default function RevealShell({ seed, className = "" }) {
             initial={{ width: "0%" }}
             animate={{ width: `${assemblyProgress * 100}%` }}
           />
+
+          {/* (confetti for decor moved to modal layer) */}
         </div>
       </motion.div>
             </motion.div>
@@ -834,6 +837,13 @@ export default function RevealShell({ seed, className = "" }) {
             }}
           />
 
+          {/* Confetti emitter behind left decor (continuous, low-cost DOM confetti) */}
+          <CelebrationConfetti
+            side="left"
+            active={showModal || showConfetti}
+            className="hidden md:block fixed left-4 md:left-1 lg:left-1 top-40 z-[74] w-40 md:w-56 lg:w-72 pointer-events-none"
+          />
+
           {/* Right character — vertical float only, out-of-phase if you like */}
           <motion.img
             src="/right-decor.png"
@@ -857,6 +867,13 @@ export default function RevealShell({ seed, className = "" }) {
               filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.4))",
               willChange: "transform",
             }}
+          />
+
+          {/* Confetti emitter behind right decor (continuous, low-cost DOM confetti) */}
+          <CelebrationConfetti
+            side="right"
+            active={showModal || showConfetti}
+            className="hidden md:block fixed right-4 md:right-2 lg:right-2 top-43 z-[74] w-40 md:w-56 lg:w-72 pointer-events-none"
           />
         </>
       )}
