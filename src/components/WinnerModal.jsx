@@ -37,7 +37,7 @@ export default function WinnerModal({
   // Memoized particle arrays (generated when modal opens)
   const confettiParticles = useMemo(() => {
     if (!isOpen) return [];
-    const count = prefersReducedMotion ? 24 : 50;
+    const count = prefersReducedMotion ? 12 : 30;
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       x: 50 + (Math.random() - 0.5) * 30,
@@ -366,11 +366,11 @@ export default function WinnerModal({
               >
                 {/* Trophy icon with optimized glow */}
                 <Trophy
-                  className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 text-yellow-300 relative z-10 will-change-transform"
-                  style={{
-                    filter:
-                      "drop-shadow(0 0 25px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 50px rgba(255, 165, 0, 0.6))",
-                  }}
+                    className="w-12 sm:w-14 md:w-16 h-12 sm:h-14 md:h-16 text-yellow-300 relative z-10 will-change-transform"
+                    style={{
+                      filter:
+                        "drop-shadow(0 0 12px rgba(255, 215, 0, 0.85)) drop-shadow(0 0 24px rgba(255, 165, 0, 0.45))",
+                    }}
                 />
 
                 {/* Consolidated outer-glow halo - REDUCED from 3 layers to 1 */}
@@ -442,14 +442,14 @@ export default function WinnerModal({
                 stiffness: 200,
                 delay: 0.15,
               }}
-              className="relative max-w-xs sm:max-w-sm md:max-w-xl lg:max-w-2xl  h-100px pointer-events-auto"
+              className="w-full max-w-xs pointer-events-auto"
             >
               {/* MAIN CARD - Multi-layer glass with extreme depth */}
               <div className="relative rounded-[2.5rem] overflow-visible">
                 {/* Base glass layer */}
                 <div
                   className="absolute inset-0 bg-gradient-to-br from-purple-950/50 via-slate-950/70 to-cyan-950/50"
-                  style={{ backdropFilter: "blur(50px) saturate(200%)" }}
+                  style={{ backdropFilter: "blur(30px) saturate(180%)" }}
                 />
                 {/* Inner neon outline - glowing gradient border */}
                 <motion.div
@@ -511,7 +511,7 @@ export default function WinnerModal({
                   className="absolute inset-0 rounded-[2.5rem]"
                   style={{
                     boxShadow:
-                      "0 0 120px rgba(0, 255, 255, 0.7), 0 0 180px rgba(255, 0, 255, 0.6), 0 0 240px rgba(255, 20, 147, 0.5), inset 0 0 100px rgba(139, 0, 255, 0.2)",
+                      "0 0 60px rgba(0, 255, 255, 0.6), 0 0 90px rgba(255, 0, 255, 0.45), inset 0 0 50px rgba(139, 0, 255, 0.15)",
                   }}
                 />
                 {/* High-depth soft shadow */}
@@ -537,7 +537,7 @@ export default function WinnerModal({
                   <X className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-cyan-300 group-hover:rotate-90 group-hover:scale-125 transition-transform duration-300" />
                 </button>{" "}
                 {/* CONTENT */}
-                <div className="relative p-4 sm:p-5 md:p-6 lg:p-8">
+                <div className="relative p-2 sm:p-3 md:p-4">
                   {/* ═══════════════════════════════════════════════════════════
                       CONGRATULATIONS HEADER - Vibrant Gradient with Halo
                       ═══════════════════════════════════════════════════════════ */}
@@ -545,7 +545,7 @@ export default function WinnerModal({
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
-                    className="mb-6 relative"
+                    className="mb-3 relative"
                   >
                     {/* Neon outer-glow halo behind text */}
                     <motion.div
@@ -565,7 +565,7 @@ export default function WinnerModal({
                     />
 
                     <h2
-                      className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-center relative z-10 tracking-wide"
+                      className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-center relative z-10 tracking-wide"
                       style={{
                         fontFamily: "Space Grotesk, sans-serif",
                         background:
@@ -574,7 +574,7 @@ export default function WinnerModal({
                         WebkitTextFillColor: "transparent",
                         backgroundClip: "text",
                         textShadow:
-                          "0 0 60px rgba(255, 215, 0, 0.9), 0 0 100px rgba(255, 105, 180, 0.7), 0 0 140px rgba(0, 255, 255, 0.5)",
+                          "0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 105, 180, 0.6), 0 0 90px rgba(0, 255, 255, 0.4)",
                         letterSpacing: "0.08em",
                       }}
                       id="modal-title"
@@ -590,25 +590,25 @@ export default function WinnerModal({
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.7 }}
-                    className="relative rounded-3xl p-8 mb-6 overflow-visible"
+                    className="relative rounded-2xl p-4 mb-4 overflow-visible"
                     style={{
                       background:
-                        "linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1))",
-                      backdropFilter: "blur(40px)",
-                      border: "2px solid rgba(0, 255, 255, 0.4)",
+                        "linear-gradient(135deg, rgba(0, 255, 255, 0.08), rgba(255, 0, 255, 0.08))",
+                      backdropFilter: "blur(30px)",
+                      border: "1px solid rgba(0, 255, 255, 0.3)",
                       boxShadow:
-                        "0 10px 40px rgba(0, 255, 255, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.15)",
+                        "0 8px 24px rgba(0, 255, 255, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.1)",
                     }}
                   >
                     {/* Elevated glass panel shadow */}
                     <div
-                      className="absolute inset-0 rounded-3xl"
-                      style={{ boxShadow: "0 20px 60px rgba(0, 0, 0, 0.5)" }}
+                      className="absolute inset-0 rounded-2xl"
+                      style={{ boxShadow: "0 12px 40px rgba(0, 0, 0, 0.4)" }}
                     />
 
                     <div className="relative flex flex-col items-center">
                       {/* AVATAR with rotating neon ring + holographic reflection */}
-                      <div className="relative mb-5">
+                      <div className="relative mb-2">
                         <div
                           className="relative"
                           style={{ transform: "translateZ(50px)" }}
@@ -617,10 +617,13 @@ export default function WinnerModal({
                           <img
                             src={winner.avatar}
                             alt={`${winner.name}'s avatar`}
-                            className="w-20 sm:w-24 md:w-28 h-20 sm:h-24 md:h-28 rounded-full border-4 border-cyan-400/70 relative z-10 object-cover"
+                            loading="lazy"
+                            decoding="async"
+                            fetchpriority="low"
+                            className="w-12 sm:w-14 md:w-16 h-12 sm:h-14 md:h-16 rounded-full border-3 border-cyan-400/60 relative z-10 object-cover"
                             style={{
                               boxShadow:
-                                "0 0 40px rgba(0, 255, 255, 0.7), 0 20px 40px rgba(0, 0, 0, 0.6)",
+                                "0 0 16px rgba(0, 255, 255, 0.5), 0 8px 16px rgba(0, 0, 0, 0.4)",
                             }}
                           />
 
@@ -633,10 +636,10 @@ export default function WinnerModal({
                               type: "spring",
                               damping: 12,
                             }}
-                            className="absolute -top-5 left-1/2 -translate-x-1/2 z-20 bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 rounded-full p-2.5"
+                            className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 rounded-full p-1.5"
                             style={{
                               boxShadow:
-                                "0 0 30px rgba(255, 215, 0, 0.9), 0 0 50px rgba(255, 140, 0, 0.7)",
+                                "0 0 20px rgba(255, 215, 0, 0.8), 0 0 35px rgba(255, 140, 0, 0.6)",
                             }}
                           >
                             <motion.div
@@ -648,7 +651,7 @@ export default function WinnerModal({
                                 repeat: repeatCount,
                               }}
                             >
-                              <Crown className="w-6 h-6 text-white" />
+                              <Crown className="w-4 h-4 text-white" />
                             </motion.div>
                           </motion.div>
 
@@ -742,10 +745,10 @@ export default function WinnerModal({
 
                       {/* Winner name */}
                       <h3
-                        className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-3 text-center"
+                        className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-2 text-center"
                         style={{
                           textShadow:
-                            "0 0 30px rgba(0, 255, 255, 0.7), 0 4px 12px rgba(0, 0, 0, 0.5)",
+                            "0 0 20px rgba(0, 255, 255, 0.6), 0 2px 6px rgba(0, 0, 0, 0.4)",
                         }}
                       >
                         {winner.name}
@@ -756,12 +759,12 @@ export default function WinnerModal({
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ delay: 1, type: "spring", damping: 18 }}
-                        className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full mb-8 relative overflow-hidden"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full mb-4 relative overflow-hidden text-xs sm:text-sm"
                         style={{
                           background:
                             "linear-gradient(135deg, #FFD700 0%, #8B00FF 50%, #FF00FF 100%)",
                           boxShadow:
-                            "0 0 40px rgba(255, 215, 0, 0.7), 0 0 60px rgba(139, 0, 255, 0.6), 0 10px 35px rgba(0, 0, 0, 0.4)",
+                            "0 0 25px rgba(255, 215, 0, 0.6), 0 0 40px rgba(139, 0, 255, 0.5), 0 6px 20px rgba(0, 0, 0, 0.3)",
                         }}
                       >
                         <motion.div
@@ -780,9 +783,9 @@ export default function WinnerModal({
                             repeatDelay: 1,
                           }}
                         />
-                        <Award className="w-5 h-5 text-white relative z-10" />
-                        <span className="text-white font-black text-sm uppercase tracking-widest relative z-10">
-                          Grand Prize Winner
+                        <Award className="w-3 h-3 text-white relative z-10" />
+                        <span className="text-white font-black text-xs uppercase tracking-widest relative z-10">
+                          Grand Prize
                         </span>
                       </motion.div>
 
@@ -793,8 +796,8 @@ export default function WinnerModal({
                         <motion.div
                           className="relative mx-auto"
                           style={{
-                            width: "min(160px, 80vw)",
-                            height: "min(160px, 80vw)",
+                            width: "min(140px, 70vw)",
+                            height: "min(140px, 70vw)",
                           }}
                           animate={{
                             y: [0, -12, 0],
@@ -999,43 +1002,22 @@ export default function WinnerModal({
                             LEGENDARY PRIZE
                             <Zap className="w-5 h-5" />
                           </span>
-                        </motion.div> */}
+                        <motion.div
 
                         {/* Prize details */}
                         <h4
-                          className="text-2xl md:text-3xl font-bold text-white mt-5 mb-3 text-center"
+                          className="text-lg sm:text-xl md:text-2xl font-bold text-white mt-3 mb-2 text-center"
                           style={{
-                            textShadow: "0 0 30px rgba(255, 0, 255, 0.7)",
+                            textShadow: "0 0 20px rgba(255, 0, 255, 0.6)",
                           }}
                         >
                           {prize.name}
                         </h4>
-                        <p className="text-white/80 mb-5 text-sm text-center max-w-lg mx-auto leading-relaxed">
+                        <p className="text-white/80 mb-3 text-xs sm:text-sm text-center max-w-xs mx-auto leading-relaxed">
                           {prize.description}
                         </p>
 
-                        {/* Prize value with extreme pulsing glow */}
-                        {/* <motion.div
-                          className="inline-block px-8 py-3.5 rounded-full"
-                          style={{
-                            background: 'linear-gradient(135deg, #8b00ff, #ff00ff, #ff1493)',
-                            backgroundSize: '200% 100%',
-                          }}
-                          animate={{
-                            backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                            boxShadow: [
-                              '0 0 40px rgba(139, 0, 255, 0.9), 0 0 60px rgba(255, 0, 255, 0.7)',
-                              '0 0 60px rgba(255, 0, 255, 1), 0 0 90px rgba(255, 20, 147, 0.9)',
-                              '0 0 40px rgba(139, 0, 255, 0.9), 0 0 60px rgba(255, 0, 255, 0.7)',
-                            ],
-                          }}
-                          transition={{
-                            backgroundPosition: { duration: 5, repeat: repeatCount, ease: 'linear' },
-                            boxShadow: { duration: 2.5, repeat: repeatCount },
-                          }}
-                        >
-                          <span className="text-3xl md:text-4xl font-black text-white" style={{ textShadow: '0 3px 10px rgba(0, 0, 0, 0.6)' }}>{prize.value}</span>
-                        </motion.div> */}
+                        {/* Prize value with extreme pulsing glow (removed for performance) */}
                       </div>
                     </div>
                   </motion.div>
@@ -1047,30 +1029,27 @@ export default function WinnerModal({
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.3 }}
-                    className="flex gap-4"
+                    className="flex gap-2"
                   >
                     {showNextButton ? (
                       <>
+                        {/* Reveal Next Winner */}
                         {/* Reveal Next Winner Button */}
                         <motion.button
                           onClick={onNextWinner}
-                          className="relative flex-1 px-7 py-3.5 rounded-xl overflow-hidden group"
+                          className="relative flex-1 px-4 py-2 rounded-lg overflow-hidden group text-xs sm:text-sm font-bold"
                           style={{
                             background:
                               "linear-gradient(135deg, #8b00ff 0%, #ff00ff 50%, #00ffff 100%)",
                             boxShadow:
-                              "0 10px 35px rgba(139, 0, 255, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.25)",
+                              "0 6px 20px rgba(139, 0, 255, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.2)",
                           }}
-                          whileHover={{ scale: 1.04, y: -3 }}
-                          whileTap={{ scale: 0.97 }}
+                          whileHover={{ scale: 1.02, y: -1 }}
+                          whileTap={{ scale: 0.98 }}
                         >
-                          {/* Scanning border animation */}
                           <motion.div
                             className="absolute inset-0 rounded-xl"
-                            style={{
-                              border: "2px solid rgba(0, 255, 255, 0)",
-                              boxShadow: "0 0 0 2px rgba(0, 255, 255, 0)",
-                            }}
+                            style={{ border: "2px solid rgba(0, 255, 255, 0)", boxShadow: "0 0 0 2px rgba(0, 255, 255, 0)" }}
                             animate={{
                               boxShadow: [
                                 "0 0 0 2px rgba(0, 255, 255, 0)",
@@ -1078,109 +1057,47 @@ export default function WinnerModal({
                                 "0 0 0 2px rgba(0, 255, 255, 0)",
                               ],
                             }}
-                            transition={{
-                              duration: 2,
-                              repeat: repeatCount,
-                            }}
+                            transition={{ duration: 2, repeat: repeatCount }}
                           />
 
-                          {/* Light streak */}
                           <motion.div
                             className="absolute inset-0"
-                            style={{
-                              background:
-                                "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent)",
-                            }}
-                            animate={{
-                              x: ["-100%", "200%"],
-                            }}
-                            transition={{
-                              duration: 2.5,
-                              repeat: repeatCount,
-                              repeatDelay: 1.5,
-                              ease: "easeInOut",
-                            }}
+                            style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)" }}
+                            animate={{ x: ["-100%", "200%"] }}
+                            transition={{ duration: 2.5, repeat: repeatCount, repeatDelay: 1.5, ease: "easeInOut" }}
                           />
 
-                          <div className="relative flex items-center justify-center gap-2.5 text-white font-bold text-base">
-                            <Sparkles className="w-5 h-5" />
-                            Reveal Next Winner
-                            <ChevronRight className="w-5 h-5" />
+                          <div className="relative flex items-center justify-center gap-1.5 text-white font-bold text-xs sm:text-sm">
+                            <Sparkles className="w-3 h-3" />
+                            Reveal Next
+                            <ChevronRight className="w-3 h-3" />
                           </div>
 
-                          {/* Glow on hover */}
-                          <div
-                            className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                            style={{
-                              boxShadow:
-                                "0 0 50px rgba(0, 255, 255, 1), inset 0 0 20px rgba(255, 255, 255, 0.15)",
-                            }}
-                          />
+                          <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ boxShadow: "0 0 50px rgba(0,255,255,1), inset 0 0 20px rgba(255,255,255,0.15)" }} />
                         </motion.button>
 
                         {/* Back to Home */}
                         <Link href="/" className="flex-1">
                           <motion.button
-                            className="relative w-full px-7 py-3.5 rounded-xl overflow-hidden group"
+                            className="relative w-full px-4 py-2 rounded-lg overflow-hidden group"
                             style={{
-                              background:
-                                "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))",
+                              background: "linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))",
                               backdropFilter: "blur(25px)",
                               border: "2px solid rgba(0, 255, 255, 0.6)",
-                              boxShadow:
-                                "0 10px 35px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.15)",
+                              boxShadow: "0 10px 35px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.15)",
                             }}
                             whileHover={{ scale: 1.04, y: -3 }}
                             whileTap={{ scale: 0.97 }}
                           >
-                            {/* Scanning border */}
-                            <motion.div
-                              className="absolute inset-0 rounded-xl"
-                              animate={{
-                                boxShadow: [
-                                  "0 0 0 2px rgba(0, 255, 255, 0)",
-                                  "0 0 20px 2px rgba(0, 255, 255, 0.8)",
-                                  "0 0 0 2px rgba(0, 255, 255, 0)",
-                                ],
-                              }}
-                              transition={{
-                                duration: 2,
-                                repeat: repeatCount,
-                                delay: 0.5,
-                              }}
-                            />
+                            <motion.div className="absolute inset-0 rounded-lg" animate={{ boxShadow: ["0 0 0 2px rgba(0,255,255,0)", "0 0 20px 2px rgba(0,255,255,0.8)", "0 0 0 2px rgba(0,255,255,0)"] }} transition={{ duration: 2, repeat: repeatCount, delay: 0.5 }} />
+                            <motion.div className="absolute inset-0" style={{ background: "linear-gradient(90deg, transparent, rgba(0,255,255,0.4), transparent)" }} animate={{ x: ["-100%","200%"] }} transition={{ duration: 2.5, repeat: repeatCount, repeatDelay: 1.5, ease: "easeInOut" }} />
 
-                            {/* Light streak */}
-                            <motion.div
-                              className="absolute inset-0"
-                              style={{
-                                background:
-                                  "linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.4), transparent)",
-                              }}
-                              animate={{
-                                x: ["-100%", "200%"],
-                              }}
-                              transition={{
-                                duration: 2.5,
-                                repeat: repeatCount,
-                                repeatDelay: 1.5,
-                                ease: "easeInOut",
-                              }}
-                            />
-
-                            <div className="relative flex items-center justify-center gap-2.5 text-white font-bold text-base">
-                              <Home className="w-5 h-5" />
+                            <div className="relative flex items-center justify-center gap-1.5 text-white font-bold text-xs sm:text-sm">
+                              <Home className="w-4 h-4" />
                               Back to Home
                             </div>
 
-                            {/* Neon hover */}
-                            <div
-                              className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                              style={{
-                                boxShadow:
-                                  "0 0 40px rgba(0, 255, 255, 0.9), inset 0 0 30px rgba(0, 255, 255, 0.2)",
-                              }}
-                            />
+                            <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ boxShadow: "0 0 40px rgba(0,255,255,0.9), inset 0 0 30px rgba(0,255,255,0.2)" }} />
                           </motion.button>
                         </Link>
                       </>
@@ -1189,7 +1106,7 @@ export default function WinnerModal({
                         {/* Back to Home - Primary */}
                         <Link href="/" className="flex-1">
                           <motion.button
-                            className="relative w-full px-7 py-3.5 rounded-xl overflow-hidden group"
+                            className="relative w-full px-4 py-2 rounded-lg overflow-hidden group"
                             style={{
                               background:
                                 "linear-gradient(135deg, #8b00ff 0%, #ff00ff 50%, #00ffff 100%)",
@@ -1201,7 +1118,7 @@ export default function WinnerModal({
                           >
                             {/* Scanning border */}
                             <motion.div
-                              className="absolute inset-0 rounded-xl"
+                              className="absolute inset-0 rounded-lg"
                               animate={{
                                 boxShadow: [
                                   "0 0 0 2px rgba(0, 255, 255, 0)",
@@ -1233,8 +1150,8 @@ export default function WinnerModal({
                               }}
                             />
 
-                            <div className="relative flex items-center justify-center gap-2.5 text-white font-bold text-base">
-                              <Home className="w-5 h-5" />
+                            <div className="relative flex items-center justify-center gap-1.5 text-white font-bold text-xs sm:text-sm">
+                              <Home className="w-4 h-4" />
                               Back to Home
                             </div>
 
@@ -1252,7 +1169,7 @@ export default function WinnerModal({
                         {/* Reveal Again */}
                         <Link href="/reveal" className="flex-1">
                           <motion.button
-                            className="relative w-full px-7 py-3.5 rounded-xl overflow-hidden group"
+                            className="relative w-full px-4 py-2 rounded-lg overflow-hidden group"
                             style={{
                               background:
                                 "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))",
@@ -1266,7 +1183,7 @@ export default function WinnerModal({
                           >
                             {/* Scanning border */}
                             <motion.div
-                              className="absolute inset-0 rounded-xl"
+                              className="absolute inset-0 rounded-lg"
                               animate={{
                                 boxShadow: [
                                   "0 0 0 2px rgba(0, 255, 255, 0)",
@@ -1299,8 +1216,8 @@ export default function WinnerModal({
                               }}
                             />
 
-                            <div className="relative flex items-center justify-center gap-2.5 text-white font-bold text-base">
-                              <RefreshCw className="w-5 h-5" />
+                            <div className="relative flex items-center justify-center gap-1.5 text-white font-bold text-xs sm:text-sm">
+                              <RefreshCw className="w-4 h-4" />
                               Reveal Again
                             </div>
 

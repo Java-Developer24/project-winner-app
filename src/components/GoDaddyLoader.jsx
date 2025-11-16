@@ -11,30 +11,18 @@ export const GoDaddyLoader = ({ onComplete }) => {
   const repeatCount = prefersReducedMotion ? 0 : Infinity;
 
   useEffect(() => {
-    // Generate particles for animation - PREMIUM QUALITY
-    const particleCount = 400;
-    const generatedParticles = Array.from({ length: particleCount }, (_, i) => ({
-      id: i,
-      size: Math.random() * 6 + 3,
-      speed: Math.random() * 2 + 1,
-      delay: Math.random() * 3.0,
-      initialX: Math.random() * window.innerWidth,
-      initialY: Math.random() * window.innerHeight,
-      orbitRadius: Math.random() * 120 + 60,
-      orbitSpeed: Math.random() * 2 + 1,
-      type: i % 3 === 0 ? 'fast' : i % 3 === 1 ? 'medium' : 'slow',
-    }));
-    setParticles(generatedParticles);
+    // Simplified: No particle array to reduce memory and lag
+    setParticles([]);
 
-    // Stage progression timeline - EXTENDED TO 15 SECONDS
+    // Stage progression timeline - SIMPLIFIED TO 8 SECONDS
     const timers = [
-      setTimeout(() => setStage('formation'), 3000),  // 0.0s - 3.0s (skeleton)
-      setTimeout(() => setStage('assembly'), 8000),   // 3.0s - 8.0s (formation)
-      setTimeout(() => setStage('reveal'), 11500),    // 8.0s - 11.5s (assembly)
+      setTimeout(() => setStage('formation'), 2000),  // 0.0s - 2.0s (skeleton)
+      setTimeout(() => setStage('assembly'), 4500),   // 2.0s - 4.5s (formation)
+      setTimeout(() => setStage('reveal'), 6500),     // 4.5s - 6.5s (assembly)
       setTimeout(() => {
         setStage('complete');
         if (onComplete) onComplete();
-      }, 15000),  // 11.5s - 15.0s (reveal) - TOTAL 15 SECONDS
+      }, 8000),  // 6.5s - 8.0s (reveal) - TOTAL 8 SECONDS
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -176,10 +164,10 @@ export const GoDaddyLoader = ({ onComplete }) => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              {/* Premium glass card silhouettes */}
+              {/* Premium glass card with loading animation and GoDaddy branding */}
               <div className="relative">
                 <motion.div
-                  className="w-[420px] h-[220px] rounded-[32px]"
+                  className="w-[420px] h-[220px] rounded-[32px] flex flex-col items-center justify-center"
                   style={{
                     background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02))',
                     backdropFilter: 'blur(30px) saturate(150%)',
@@ -189,11 +177,41 @@ export const GoDaddyLoader = ({ onComplete }) => {
                   initial={{ scale: 0.85, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 1.5, ease: [0.34, 1.56, 0.64, 1] }}
-                />
+                >
+                  {/* Loading spinner with aqua glow */}
+                  <motion.div
+                    className="relative w-20 h-20 mb-6"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                  >
+                    <motion.div
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        border: '3px solid transparent',
+                        borderTopColor: 'rgba(0, 224, 202, 0.8)',
+                        borderRightColor: 'rgba(0, 224, 202, 0.4)',
+                        boxShadow: '0 0 30px rgba(0, 224, 202, 0.6), inset 0 0 15px rgba(0, 224, 202, 0.2)',
+                      }}
+                    />
+                  </motion.div>
+                  
+                  {/* GoDaddy Text */}
+                  <motion.p
+                    className="text-2xl font-bold text-white tracking-wide"
+                    style={{
+                      textShadow: '0 0 20px rgba(0, 224, 202, 0.5), 0 0 10px rgba(0, 224, 202, 0.3)',
+                    }}
+                    initial={{ opacity: 0.7 }}
+                    animate={{ opacity: [0.7, 1, 0.7] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                  >
+                    GoDaddy
+                  </motion.p>
+                </motion.div>
                 
-                {/* Premium progress bar */}
+                {/* Premium progress bar below card */}
                 <motion.div
-                  className="absolute bottom-10 left-1/2 -translate-x-1/2 w-56 h-1.5 rounded-full overflow-hidden"
+                  className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-56 h-1.5 rounded-full overflow-hidden"
                   style={{ 
                     background: 'rgba(255, 255, 255, 0.08)',
                     boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)',
@@ -230,161 +248,51 @@ export const GoDaddyLoader = ({ onComplete }) => {
             </motion.div>
           )}
 
-          {/* Stage 2: Formation (3.0s - 8.0s) - Particles flow in and orbit */}
-          {stage === 'formation' && (
-            <div className="absolute inset-0">
-              {particles.map((particle) => (
-                <motion.div
-                  key={particle.id}
-                  className="absolute rounded-full"
-                  style={{
-                    width: particle.size,
-                    height: particle.size,
-                    background:
-                      particle.type === 'fast'
-                        ? 'radial-gradient(circle, #00E0CA 0%, #00ADB5 100%)'
-                        : particle.type === 'medium'
-                        ? 'radial-gradient(circle, #0dd9e2 0%, #00ADB5 100%)'
-                        : 'radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.4) 100%)',
-                    boxShadow:
-                      particle.type === 'fast'
-                        ? '0 0 14px rgba(0, 224, 202, 0.9), 0 0 6px rgba(0, 224, 202, 0.6)'
-                        : particle.type === 'medium'
-                        ? '0 0 12px rgba(13, 217, 226, 0.8), 0 0 5px rgba(13, 217, 226, 0.5)'
-                        : '0 0 10px rgba(255, 255, 255, 0.6)',
-                    filter: 'blur(0.5px)',
-                  }}
-                  initial={{
-                    x: particle.initialX,
-                    y: particle.initialY,
-                    opacity: 0,
-                    scale: 0,
-                  }}
-                  animate={{
-                    x: [
-                      particle.initialX,
-                      window.innerWidth / 2 + Math.cos(particle.id) * particle.orbitRadius,
-                      window.innerWidth / 2 + Math.cos(particle.id + Math.PI) * particle.orbitRadius,
-                    ],
-                    y: [
-                      particle.initialY,
-                      window.innerHeight / 2 + Math.sin(particle.id) * particle.orbitRadius,
-                      window.innerHeight / 2 + Math.sin(particle.id + Math.PI) * particle.orbitRadius,
-                    ],
-                    opacity: [0, 1, 0.9],
-                    scale: [0, 1.1, 1],
-                  }}
-                  transition={{
-                    duration: 4.5,
-                    delay: particle.delay,
-                    ease: [0.34, 1.56, 0.64, 1],
-                  }}
-                />
-              ))}
-            </div>
-          )}
+          {/* Stage 2: Formation (2.0s - 4.5s) - Simpler, no particles to reduce lag */}
+          {/* Stage 2: Formation (2.0s - 4.5s) - No card, just background */}
+          {stage === 'formation' && null}
 
-          {/* Stage 3: Assembly (8.0s - 11.5s) - Particles snap into logo outline */}
+          {/* Stage 3: Assembly (4.5s - 6.5s) - Simpler without 60 snapping particles */}
           {stage === 'assembly' && (
             <div className="absolute inset-0 flex items-center justify-center">
-              {/* Premium logo outline formation */}
               <motion.div
                 className="relative"
-                initial={{ opacity: 0, scale: 0.6, rotateY: -90 }}
-                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{
-                  duration: 2.5,
-                  ease: [0.34, 1.56, 0.64, 1], // Premium spring settle
+                  duration: 1.5,
+                  ease: [0.34, 1.56, 0.64, 1],
                 }}
               >
-                {/* Enhanced 3D extruded outline with neon aqua */}
+                {/* Simpler outline without snapping particles */}
                 <motion.div
-                  className="absolute inset-0 rounded-[64px]"
+                  className="relative w-[340px] h-[170px] flex items-center justify-center rounded-[64px] overflow-hidden"
                   style={{
+                    background: 'linear-gradient(135deg, rgba(0, 224, 202, 0.15), rgba(0, 173, 181, 0.08))',
                     border: '3px solid rgba(0, 224, 202, 0.7)',
-                    boxShadow:
-                      '0 0 50px rgba(0, 224, 202, 0.7), ' +
-                      '0 0 30px rgba(0, 224, 202, 0.5), ' +
-                      'inset 0 0 50px rgba(0, 224, 202, 0.3), ' +
-                      '0 12px 40px rgba(0, 0, 0, 0.5)',
-                    filter: 'blur(1.5px)',
+                    boxShadow: '0 0 50px rgba(0, 224, 202, 0.7), 0 0 30px rgba(0, 224, 202, 0.5)',
                   }}
                   animate={{
                     scale: [1, 1.06, 1],
                   }}
                   transition={{
-                    duration: 1.0,
+                    duration: 1.5,
                     ease: 'easeOut',
                   }}
                 />
-
-                {/* Premium shader dissolve effect */}
-                <motion.div
-                  className="relative w-[340px] h-[170px] flex items-center justify-center rounded-[64px] overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(0, 224, 202, 0.15), rgba(0, 173, 181, 0.08))',
-                    backdropFilter: 'blur(30px) saturate(150%)',
-                    boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-                  }}
-                >
-                  <motion.div
-                    className="absolute inset-0"
-                    style={{
-                      background: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'5\' /%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.25\'/%3E%3C/svg%3E")',
-                      opacity: 0.25,
-                    }}
-                    animate={{
-                      opacity: [0.25, 0, 0],
-                    }}
-                    transition={{
-                      duration: 2.0,
-                      ease: [0.45, 0.05, 0.55, 0.95],
-                    }}
-                  />
-                </motion.div>
-
-                {/* Premium particles snapping into place */}
-                {particles.slice(0, 60).map((particle, i) => (
-                  <motion.div
-                    key={`snap-${particle.id}`}
-                    className="absolute rounded-full"
-                    style={{
-                      width: 5,
-                      height: 5,
-                      background: '#00E0CA',
-                      boxShadow: '0 0 12px rgba(0, 224, 202, 1), 0 0 6px rgba(0, 224, 202, 0.8)',
-                    }}
-                    initial={{
-                      x: Math.cos(i) * 220,
-                      y: Math.sin(i) * 220,
-                      opacity: 1,
-                    }}
-                    animate={{
-                      x: (Math.cos(i) * 170) + 170,
-                      y: (Math.sin(i) * 85) + 85,
-                      opacity: 0,
-                      scale: [1, 1.6, 0],
-                    }}
-                    transition={{
-                      duration: 2.2,
-                      delay: (i / 60) * 1.2,
-                      ease: [0.34, 1.56, 0.64, 1],
-                    }}
-                  />
-                ))}
               </motion.div>
             </div>
           )}
 
-          {/* Stage 4: Reveal (11.5s - 15.0s) - Final logo with premium bloom */}
+          {/* Stage 4: Reveal (6.5s - 8.0s) - Final logo without 40 confetti particles */}
           {stage === 'reveal' && (
             <motion.div
               className="absolute inset-0 flex items-center justify-center"
               initial={{ scale: 0.92 }}
               animate={{ scale: 1 }}
-              transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              {/* Enhanced center glow - brighter and cleaner */}
+              {/* Enhanced center glow */}
               <motion.div
                 className="absolute"
                 style={{
@@ -398,7 +306,7 @@ export const GoDaddyLoader = ({ onComplete }) => {
                   opacity: [0, 1, 0.9],
                 }}
                 transition={{
-                  duration: 2.0,
+                  duration: 1.5,
                   ease: [0.45, 0.05, 0.55, 0.95],
                 }}
               />
@@ -418,13 +326,13 @@ export const GoDaddyLoader = ({ onComplete }) => {
                   opacity: [0.6, 1, 0.9],
                 }}
                 transition={{
-                  scale: { duration: 2.5, ease: 'easeInOut' },
-                  rotate: { duration: 20, repeat: Infinity, ease: 'linear' },
-                  opacity: { duration: 2.0, ease: 'easeOut' },
+                  scale: { duration: 2.0, ease: 'easeInOut' },
+                  rotate: { duration: 15, repeat: Infinity, ease: 'linear' },
+                  opacity: { duration: 1.5, ease: 'easeOut' },
                 }}
               />
 
-              {/* Premium light sweep with ambient reflections */}
+              {/* Premium light sweep */}
               <motion.div
                 className="absolute inset-0 pointer-events-none overflow-hidden"
                 style={{
@@ -435,20 +343,20 @@ export const GoDaddyLoader = ({ onComplete }) => {
                 initial={{ x: '-250%' }}
                 animate={{ x: '250%', opacity: [0, 1, 0.8, 0] }}
                 transition={{
-                  duration: 2.0,
+                  duration: 1.5,
                   ease: [0.45, 0.05, 0.55, 0.95],
                 }}
               />
 
-              {/* Final GoDaddy Logo - ENHANCED SIZE & CLARITY */}
+              {/* Final GoDaddy Logo */}
               <motion.div
                 className="relative z-10"
                 initial={{ opacity: 0, y: 25, scale: 0.85 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 1.3, ease: [0.25, 0.1, 0.25, 1] }}
+                transition={{ duration: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <motion.img
-                  src="./logogd.png??width=8000&height=8000&resize=contain"
+                  src="./logogd.png?width=8000&height=8000&resize=contain"
                   alt="GoDaddy logo"
                   className="w-96 h-auto"
                   style={{
@@ -464,18 +372,18 @@ export const GoDaddyLoader = ({ onComplete }) => {
                     ],
                   }}
                   transition={{
-                    duration: 2.5,
+                    duration: 2.0,
                     repeat: Infinity,
                     ease: 'easeInOut',
                   }}
                 />
                 
-                {/* Premium text with enhanced size and clarity */}
+                {/* Premium text */}
                 <motion.div
                   className="text-center mt-8"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8, duration: 0.7 }}
+                  transition={{ delay: 0.6, duration: 0.5 }}
                 >
                   <p 
                     className="text-3xl font-bold text-white tracking-wide"
@@ -489,69 +397,6 @@ export const GoDaddyLoader = ({ onComplete }) => {
                   >
                     GoDaddy
                   </p>
-                </motion.div>
-
-                {/* Premium confetti burst with richer colors */}
-                <div className="absolute inset-0 pointer-events-none">
-                  {Array.from({ length: 40 }).map((_, i) => (
-                    <motion.div
-                      key={`confetti-${i}`}
-                      className="absolute rounded-full"
-                      style={{
-                        width: Math.random() * 7 + 4,
-                        height: Math.random() * 7 + 4,
-                        background:
-                          i % 4 === 0
-                            ? 'radial-gradient(circle, #00E0CA 0%, #00ADB5 100%)'
-                            : i % 4 === 1
-                            ? 'radial-gradient(circle, #0dd9e2 0%, #00ADB5 100%)'
-                            : i % 4 === 2
-                            ? 'radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 100%)'
-                            : 'radial-gradient(circle, #00ADB5 0%, #008B94 100%)',
-                        boxShadow: i % 4 === 0 ? '0 0 10px rgba(0, 224, 202, 0.8)' : i % 4 === 1 ? '0 0 10px rgba(13, 217, 226, 0.8)' : '0 0 8px rgba(255, 255, 255, 0.6)',
-                        left: '50%',
-                        top: '50%',
-                      }}
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{
-                        opacity: [0, 1, 0],
-                        scale: [0, 1.2, 0.6],
-                        x: Math.cos((i / 40) * Math.PI * 2) * (120 + Math.random() * 60),
-                        y: Math.sin((i / 40) * Math.PI * 2) * (120 + Math.random() * 60),
-                        rotate: Math.random() * 360,
-                      }}
-                      transition={{
-                        duration: 2.0,
-                        delay: 0.5 + Math.random() * 0.5,
-                        ease: [0.45, 0.05, 0.55, 0.95],
-                      }}
-                    />
-                  ))}
-                </div>
-
-                {/* Premium shimmer with ambient glow */}
-                <motion.div
-                  className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.3 }}
-                >
-                  <motion.div
-                    className="absolute inset-0"
-                    style={{
-                      background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), rgba(0, 224, 202, 0.4), transparent)',
-                      transform: 'skewX(-18deg)',
-                      filter: 'blur(2px)',
-                    }}
-                    animate={{
-                      x: ['-250%', '250%'],
-                    }}
-                    transition={{
-                      delay: 1.5,
-                      duration: 2.0,
-                      ease: [0.45, 0.05, 0.55, 0.95],
-                    }}
-                  />
                 </motion.div>
               </motion.div>
             </motion.div>

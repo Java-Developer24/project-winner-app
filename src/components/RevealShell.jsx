@@ -5,7 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useSound } from "@/hooks/useSound";
-import WinnerModal from "./WinnerModal";
+import dynamic from "next/dynamic";
+
+// Dynamically load the heavy WinnerModal only when needed to reduce initial bundle
+const WinnerModal = dynamic(() => import("./WinnerModal"), {
+  ssr: false,
+  loading: () => null,
+});
 import MuteToggle from "./MuteToggle";
 import LoaderLottie from "./LoaderLottie";
 import ParallaxBackground from "./ParallaxBackground";
@@ -264,6 +270,7 @@ export default function RevealShell({ seed, className = "" }) {
           document.body
         )}
 
+
       {/* Main Content with Cinematic Camera Zoom Effect */}
       <motion.div
         className="relative z-10 flex items-center justify-center min-h-screen p-4"
@@ -472,10 +479,10 @@ export default function RevealShell({ seed, className = "" }) {
 
               {/* Winner 2: Energy Rings Collapsing + Holographic Cube Breaking - OPTIMIZED */}
               {currentWinnerIndex === 1 && (
-                <div className="relative w-full aspect-square max-w-2xl mx-auto flex items-center justify-center">
+                <div className="relative w-full aspect-square max-w-md mx-auto flex items-center justify-center" style={{minHeight:'320px',height:'320px',maxHeight:'320px'}}>
                   {/* Energy rings collapsing inward - REDUCED from 6 to 4 */}
                   {Array.from({ length: 4 }).map((_, i) => {
-                    const maxRadius = 280 - i * 50;
+                    const maxRadius = 140 - i * 25;
                     const collapseProgress = Math.max(
                       0,
                       Math.min(1, (assemblyProgress - i * 0.12) * 2)
@@ -518,7 +525,7 @@ export default function RevealShell({ seed, className = "" }) {
                     return (
                       <motion.div
                         key={`cube-${i}`}
-                        className="absolute w-16 h-16 rounded-lg"
+                        className="absolute w-8 h-8 rounded-lg"
                         style={{
                           background:
                             "linear-gradient(135deg, rgba(255, 79, 217, 0.7), rgba(109, 43, 255, 0.7))",
@@ -577,7 +584,7 @@ export default function RevealShell({ seed, className = "" }) {
                         src="/bikeicon.png"
                         srcSet="/bikeicon.png 1x, /bikeicon.png 2x"
                         alt="bike"
-                        className="w-[200px] h-[200px] md:w-[320px] md:h-[320px] object-contain"
+                        className="w-[90px] h-[90px] md:w-[120px] md:h-[120px] object-contain"
                         style={{ imageRendering: "auto" }}
                       />
                     </motion.div>
@@ -608,7 +615,7 @@ export default function RevealShell({ seed, className = "" }) {
                     {Array.from({ length: 5 }).map((_, i) => (
                       <motion.div
                         key={`ripple-${i}`}
-                        className="absolute inset-0 rounded-full border-4"
+                        className="absolute inset-0 rounded-full border-2"
                         style={{
                           borderColor: "rgba(255, 79, 217, 0.6)",
                           boxShadow: "0 0 30px rgba(255, 79, 217, 0.8)",
@@ -630,7 +637,7 @@ export default function RevealShell({ seed, className = "" }) {
                   {Array.from({ length: 20 }).map((_, i) => (
                     <motion.div
                       key={`spark-${i}`}
-                      className="absolute w-2 h-2 rounded-full"
+                      className="absolute w-1.5 h-1.5 rounded-full"
                       style={{
                         background: "radial-gradient(circle, #00f2ff, #ff4fd9)",
                         boxShadow: "0 0 15px #00f2ff",
@@ -652,56 +659,34 @@ export default function RevealShell({ seed, className = "" }) {
               )}
 
               {/* Progress indicator with premium styling */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="mt-5 space-y-4"
-              >
-                <div className="inline-block glass-morph-premium backdrop-blur-xl rounded-2xl px-8 py-4 border-2 border-white/20">
-                  <div className="flex items-center gap-3">
-                    <Zap className="w-6 h-6 text-yellow-400" />
-                    <span className="text-white font-bold text-2xl">
-                      {Math.floor(assemblyProgress * 100)}%
-                    </span>
-                    <span className="text-white/70 text-lg">Assembled</span>
-                  </div>
-                </div>
-
-                {/* Circular progress bar */}
-                <div className="relative w-50 h-3 bg-white/10 rounded-full overflow-hidden mx-auto backdrop-blur-sm border border-white/20">
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{
-                      background:
-                        "linear-gradient(90deg, #6d2bff, #ff4fd9, #FFD700)",
-                      boxShadow: "0 0 20px rgba(255, 215, 0, 0.6)",
-                    }}
-                    initial={{ width: "0%" }}
-                    animate={{ width: `${assemblyProgress * 100}%` }}
-                  />
-
-                  {/* Shimmer effect */}
-                  {/* <motion.div
-                    className="absolute inset-0"
-                    style={{
-                      background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
-                    }}
-                    animate={{
-                      x: ['-100%', '200%'],
-                Revealing     }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    }}
-                  /> */}
-                </div>
-
-                {/* <p className="text-white/50 text-sm">
-                  {currentWinnerIndex === 0 ? 'Jupiter Scooty' : 'Bike'}...
-                </p> */}
-              </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="mt-0 space-y-2 mb-2"
+        style={{ position: 'relative', zIndex: 20 }}
+      >
+        <div className="inline-block glass-morph-premium backdrop-blur-md rounded-lg px-3 py-1 border border-white/15">
+          <div className="flex items-center gap-1.5">
+            <Zap className="w-3 h-3 text-yellow-400" />
+            <span className="text-white font-semibold text-xs">
+              {Math.floor(assemblyProgress * 100)}%
+            </span>
+            <span className="text-white/70 text-xs">Assembled</span>
+          </div>
+        </div>
+        <div className="relative w-24 h-1 bg-white/10 rounded-full overflow-hidden mx-auto backdrop-blur-sm border border-white/15">
+          <motion.div
+            className="h-full rounded-full"
+            style={{
+              background:
+                "linear-gradient(90deg, #6d2bff, #ff4fd9, #FFD700)",
+            }}
+            initial={{ width: "0%" }}
+            animate={{ width: `${assemblyProgress * 100}%` }}
+          />
+        </div>
+      </motion.div>
             </motion.div>
           )}
 

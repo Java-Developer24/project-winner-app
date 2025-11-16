@@ -136,8 +136,8 @@ export default function HomeHero() {
             height={448}
             loading="lazy"
             className="w-80 xl:w-[28rem] h-auto object-contain drop-shadow-2xl rounded-2xl"
-            quality={75}
-            sizes="(max-width: 1280px) 320px, 448px"
+            quality={60}
+            sizes="(max-width: 1280px) 320px, 384px"
           />
         </motion.div>
       </motion.div>
@@ -192,8 +192,8 @@ export default function HomeHero() {
             height={448}
             loading="lazy"
             className="w-80 xl:w-[28rem] h-auto object-contain drop-shadow-2xl rounded-2xl"
-            quality={75}
-            sizes="(max-width: 1280px) 320px, 448px"
+            quality={60}
+            sizes="(max-width: 1280px) 320px, 384px"
           />
         </motion.div>
       </motion.div>
