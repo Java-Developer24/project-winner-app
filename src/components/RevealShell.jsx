@@ -480,10 +480,10 @@ export default function RevealShell({ seed, className = "" }) {
 
               {/* Winner 2: Energy Rings Collapsing + Holographic Cube Breaking - OPTIMIZED */}
               {currentWinnerIndex === 1 && (
-                <div className="relative w-full aspect-square max-w-4xl mx-auto flex items-center justify-center" style={{minHeight:'500px',height:'500px',maxHeight:'500px'}}>
+                <div className="relative w-full aspect-square max-w-4xl mx-auto flex items-center justify-center" style={{minHeight:'510px',height:'500px',maxHeight:'500px'}}>
                   {/* Energy rings collapsing inward - REDUCED from 6 to 4 */}
                   {Array.from({ length: 4 }).map((_, i) => {
-                    const maxRadius = 220 - i * 35;
+                    const maxRadius = 300 - i * 35;
                     const collapseProgress = Math.max(
                       0,
                       Math.min(1, (assemblyProgress - i * 0.12) * 2)
@@ -526,7 +526,7 @@ export default function RevealShell({ seed, className = "" }) {
                     return (
                       <motion.div
                         key={`cube-${i}`}
-                        className="absolute w-12 h-12 rounded-lg"
+                        className="absolute w-16 h-16 rounded-lg"
                         style={{
                           background:
                             "linear-gradient(135deg, rgba(255, 79, 217, 0.7), rgba(109, 43, 255, 0.7))",
@@ -585,7 +585,7 @@ export default function RevealShell({ seed, className = "" }) {
                         src="/bikeicon.png"
                         srcSet="/bikeicon.png 1x, /bikeicon.png 2x"
                         alt="bike"
-                        className="w-[160px] h-[160px] md:w-[200px] md:h-[200px] object-contain"
+                        className="w-[220px] h-[220px] md:w-[340px] md:h-[340px] object-contain"
                         style={{ imageRendering: "auto" }}
                       />
                     </motion.div>
