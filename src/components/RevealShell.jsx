@@ -821,16 +821,16 @@ export default function RevealShell({ seed, className = "" }) {
             alt="left character"
             className="hidden md:block pointer-events-none fixed left-4 md:left-1 lg:left-1 top-40 z-[75] w-40 md:w-56 lg:w-72"
             initial={{ opacity: 1 }} // start visible
-            // animate={{
-            //   y: [40, 0, 40],                 // vertical float only
-            //   opacity: 1                       // keep fully visible
-            // }}
-            // transition={{
-            //   duration: 3.2,
-            //   repeat: Infinity,
-            //   repeatType: "mirror",
-            //   ease: "easeInOut",
-            // }}
+            animate={{
+              y: [10, 0, 10],                 // vertical float only
+              opacity: 1                       // keep fully visible
+            }}
+            transition={{
+              duration: 3.2,
+              repeat: Infinity,
+              repeatType: "mirror",
+              ease: "easeInOut",
+            }}
             style={{
               filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.4))",
               willChange: "transform",
@@ -850,19 +850,19 @@ export default function RevealShell({ seed, className = "" }) {
             alt="right character"
             className="hidden md:block pointer-events-none fixed right-4 md:right-2 lg:right-2 top-43 z-[75] w-40 md:w-56 lg:w-72"
             initial={{ opacity: 1 }}
-            // animate={{
-            //   // either same phase:
-            //   // y: [40, 0, 40],
-            //   // or opposite phase for nicer motion:
-            //   y: [0, 40, 0],
-            //   opacity: 1
-            // }}
-            // transition={{
-            //   duration: 3.2,
-            //   repeat: Infinity,
-            //   repeatType: "mirror",
-            //   ease: "easeInOut",
-            // }}
+            animate={{
+              // either same phase:
+              // y: [40, 0, 40],
+              // or opposite phase for nicer motion:
+               y: [10, 0, 10],  
+              opacity: 1
+            }}
+            transition={{
+              duration: 3.2,
+              repeat: Infinity,
+              repeatType: "mirror",
+              ease: "easeInOut",
+            }}
             style={{
               filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.4))",
               willChange: "transform",
