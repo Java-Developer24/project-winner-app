@@ -323,7 +323,7 @@ export default function RevealShell({ seed, className = "" }) {
             >
               {/* Winner 1: 3D Shards Assembling with Holographic Wheel */}
               {currentWinnerIndex === 0 && (
-                <div className="relative w-110 h-110 max-w-2xl  mx-auto flex items-center justify-center">
+                <div className="relative w-110 h-110 max-w-2xl mt-8 md:mt-12 mx-auto flex items-center justify-center">
                   {/* Holographic rotating wheel */}
                   <motion.div
                     className="absolute inset-0 rounded-full"
@@ -480,7 +480,7 @@ export default function RevealShell({ seed, className = "" }) {
 
               {/* Winner 2: Energy Rings Collapsing + Holographic Cube Breaking - OPTIMIZED */}
               {currentWinnerIndex === 1 && (
-                <div className="relative w-full aspect-square max-w-4xl mx-auto flex items-center justify-center" style={{minHeight:'480px',height:'480px',maxHeight:'480px'}}>
+                <div className="relative w-full aspect-square max-w-4xl mx-auto flex items-center justify-center" style={{minHeight:'500px',height:'500px',maxHeight:'500px'}}>
                   {/* Energy rings collapsing inward - REDUCED from 6 to 4 */}
                   {Array.from({ length: 4 }).map((_, i) => {
                     const maxRadius = 220 - i * 35;
